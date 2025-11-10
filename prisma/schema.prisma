@@ -1,0 +1,136 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Author {
+  id           String   @id @default(uuid())
+  slug         String   @unique
+  name         String
+  bio          String?
+  avatar       String?
+  role         String   @default("editor")
+  social_links Json?
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+  posts        Post[]
+  admin_comments Comment[] @relation("AdminComments")
+
+  @@map("authors")
+}
+
+model Category {
+  id          String      @id @default(uuid())
+  slug        String      @unique
+  name        String
+  description String?
+  post_count  Int         @default(0)
+  created_at  DateTime    @default(now())
+  updated_at  DateTime    @updatedAt
+  attributes  Attribute[]
+  posts       Post[]
+
+  @@map("categories")
+}
+
+model Attribute {
+  id          String   @id @default(uuid())
+  slug        String   @unique
+  name        String
+  description String?
+  category_id String
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  category    Category @relation(fields: [category_id], references: [id])
+
+  @@index([category_id])
+  @@map("attributes")
+}
+
+model Tag {
+  id         String    @id @default(uuid())
+  slug       String    @unique
+  name       String
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  post_tags  PostTag[]
+
+  @@map("tags")
+}
+
+model Post {
+  id             String     @id @default(uuid())
+  slug           String     @unique
+  title          String
+  excerpt        String?
+  body_html      String
+  featured_image String?
+  status         String     @default("draft")
+  published_at   DateTime?
+  scheduled_at   DateTime?
+  created_at     DateTime   @default(now())
+  updated_at     DateTime   @updatedAt
+  read_time      Int        @default(5)
+  is_featured    Boolean    @default(false)
+  category_id    String?
+  author_id      String?
+  analytics      Analytics?
+  post_tags      PostTag[]
+  author         Author?    @relation(fields: [author_id], references: [id])
+  category       Category?  @relation(fields: [category_id], references: [id])
+  comments       Comment[]
+
+  @@index([author_id])
+  @@index([category_id])
+  @@index([status])
+  @@index([published_at])
+  @@map("posts")
+}
+
+model PostTag {
+  post_id String
+  tag_id  String
+  post    Post   @relation(fields: [post_id], references: [id])
+  tag     Tag    @relation(fields: [tag_id], references: [id])
+
+  @@id([post_id, tag_id])
+  @@index([tag_id])
+  @@map("post_tags")
+}
+
+model Analytics {
+  id              String   @id @default(uuid())
+  post_id         String   @unique
+  views_count     Int      @default(0)
+  unique_visitors Int      @default(0)
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+  post            Post     @relation(fields: [post_id], references: [id])
+
+  @@map("analytics")
+}
+
+model Comment {
+  id          String    @id @default(uuid())
+  post_id     String
+  parent_id   String?
+  author_name String
+  body        String
+  is_admin    Boolean   @default(false)
+  admin_id    String?
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+  post        Post      @relation(fields: [post_id], references: [id])
+  parent      Comment?  @relation("CommentReplies", fields: [parent_id], references: [id])
+  replies     Comment[] @relation("CommentReplies")
+  admin       Author?   @relation("AdminComments", fields: [admin_id], references: [id])
+
+  @@index([post_id])
+  @@index([parent_id])
+  @@index([created_at])
+  @@map("comments")
+}

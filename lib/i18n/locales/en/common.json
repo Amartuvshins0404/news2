@@ -1,0 +1,193 @@
+{
+  "brand": {
+    "name": "AuroraNews"
+  },
+  "common": {
+    "error": "Error",
+    "back": "Go Back",
+    "cancel": "Cancel",
+    "save": "Save",
+    "confirm": "Confirm",
+    "actions": "Actions",
+    "remove": "Remove"
+  },
+  "nav": {
+    "home": "Home",
+    "explore": "Explore",
+    "about": "About",
+    "contact": "Contact",
+    "categories": "Categories",
+    "editorial": "Editorial Policy",
+    "privacy": "Privacy Policy",
+    "users": "Users",
+    "posts": "Posts",
+    "media": "Media"
+  },
+  "language": {
+    "select": "Select language"
+  },
+  "theme": {
+    "toggle": "Toggle theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "footer": {
+    "madeWith": "Made with curiosity for informed readers.",
+    "rights": "© {{year}} {{siteName}}. All rights reserved.",
+    "legal": "Legal"
+  },
+  "categories": {
+    "technology": "Technology",
+    "business": "Business",
+    "science": "Science",
+    "culture": "Culture"
+  },
+  "featuredStory": "Featured Story",
+  "readFullStory": "Read full story",
+  "latestArticles": "Latest Articles",
+  "browseAll": "Browse all",
+  "stayInformed": "Stay informed with our newsletter",
+  "stayInformedDescription": "Join thousands of readers receiving weekly insights delivered to their inbox.",
+  "enterYourEmail": "Enter your email",
+  "subscribe": "Subscribe",
+  "trendingNow": "Trending Now",
+  "explore": {
+    "discover": "Discover in-demand topics",
+    "premiumNews": "Premium news for",
+    "insights": "actionable insights",
+    "description": "Search across all categories, narrow by date range, and surface the stories that matter to you.",
+    "searchPlaceholder": "Search articles, authors, or keywords",
+    "search": "Search",
+    "filters": "Filters",
+    "clearAll": "Clear all",
+    "searching": "Searching for results…",
+    "resultsFound": "{{count}} result found",
+    "resultsFound_other": "{{count}} results found",
+    "noResults": "No results found",
+    "noResultsDesc": "Try adjusting your filters or searching for a different keyword.",
+    "clearFilters": "Clear filters",
+    "refineResults": "Refine results",
+    "filtersApplied": "Filters applied",
+    "category": "Category",
+    "allCategories": "All categories",
+    "sortBy": "Sort by",
+    "sortDate": "Latest",
+    "sortViews": "Most read",
+    "sortTitle": "Title",
+    "from": "From",
+    "to": "To",
+    "tags": "Tags",
+    "apply": "Apply filters",
+    "reset": "Reset"
+  },
+  "pages": {
+    "notFound": {
+      "title": "404",
+      "heading": "Page not found",
+      "description": "Sorry, we couldn't find the page you're looking for.",
+      "goHome": "Back to homepage"
+    },
+    "about": {
+      "metaTitle": "About AuroraNews",
+      "metaDescription": "Learn more about AuroraNews and our mission to deliver quality journalism.",
+      "heading": "About AuroraNews",
+      "intro": "AuroraNews is a modern news platform dedicated to delivering high-quality journalism and insightful analysis on the topics that matter most.",
+      "missionTitle": "Our Mission",
+      "missionBody": "We believe in the power of informed discourse and the importance of accessible, accurate reporting. Our team of experienced journalists and contributors work tirelessly to bring you stories that inform, inspire, and engage.",
+      "coverageTitle": "What We Cover",
+      "coverageItems": {
+        "technology": "Technology and Innovation",
+        "business": "Business and Finance",
+        "science": "Science and Research",
+        "culture": "Culture and Lifestyle"
+      },
+      "valuesTitle": "Our Values",
+      "valuesBody": "Integrity, accuracy, and transparency guide everything we do. We are committed to ethical journalism and maintaining the trust of our readers."
+    },
+    "contact": {
+      "metaTitle": "Contact Us",
+      "metaDescription": "Get in touch with the AuroraNews team.",
+      "heading": "Contact Us",
+      "intro": "Have a question or feedback? We'd love to hear from you.",
+      "form": {
+        "name": "Name",
+        "namePlaceholder": "Your name",
+        "email": "Email",
+        "emailPlaceholder": "your@email.com",
+        "subject": "Subject",
+        "subjectPlaceholder": "What is this about?",
+        "message": "Message",
+        "messagePlaceholder": "Your message...",
+        "submit": "Send Message"
+      }
+    },
+    "editorial": {
+      "metaTitle": "Editorial Policy",
+      "metaDescription": "AuroraNews editorial standards and guidelines.",
+      "heading": "Editorial Policy",
+      "sections": {
+        "standards": {
+          "title": "Our Standards",
+          "body": "AuroraNews is committed to maintaining the highest standards of journalism. We strive for accuracy, fairness, and transparency in all our reporting."
+        },
+        "accuracy": {
+          "title": "Accuracy",
+          "body": "We verify information before publication and correct errors promptly. All factual claims are supported by credible sources."
+        },
+        "independence": {
+          "title": "Independence",
+          "body": "Our editorial decisions are independent of commercial and political influence. We clearly distinguish between news content and sponsored material."
+        },
+        "corrections": {
+          "title": "Corrections",
+          "body": "When we make mistakes, we acknowledge them quickly and clearly. Significant corrections are noted at the top of the article."
+        }
+      }
+    },
+    "privacy": {
+      "metaTitle": "Privacy Policy",
+      "metaDescription": "AuroraNews privacy policy and data handling practices.",
+      "heading": "Privacy Policy",
+      "lastUpdated": "Last updated: January 2025",
+      "sections": {
+        "collection": {
+          "title": "Information We Collect",
+          "body": "We collect information you provide directly to us, such as when you create an account, subscribe to our newsletter, or contact us for support."
+        },
+        "usage": {
+          "title": "How We Use Your Information",
+          "body": "We use the information we collect to provide, maintain, and improve our services, to communicate with you, and to protect AuroraNews and our users."
+        },
+        "security": {
+          "title": "Data Security",
+          "body": "We take reasonable measures to help protect your personal information from loss, theft, misuse, unauthorized access, disclosure, alteration, and destruction."
+        },
+        "contact": {
+          "title": "Contact Us",
+          "body": "If you have any questions about this Privacy Policy, please contact us through our contact page."
+        }
+      }
+    },
+    "category": {
+      "metaTitle": "Category",
+      "metaTitleWithName": "{{name}} Articles",
+      "metaDescription": "Browse articles in this category.",
+      "fallbackTitle": "Category",
+      "countSingular": "{{count}} article",
+      "countPlural": "{{count}} articles",
+      "empty": "No articles found in this category."
+    },
+    "post": {
+      "metaNotFound": "Post Not Found",
+      "back": "Back",
+      "readTime": "{{minutes}} min read",
+      "share": "Share this article",
+      "related": "Related Articles",
+      "social": {
+        "twitter": "Twitter",
+        "linkedin": "LinkedIn"
+      }
+    }
+  }
+}
