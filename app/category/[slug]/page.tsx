@@ -1,3 +1,5 @@
+import { Suspense } from "react"
+
 import { TopNav } from "@/components/top-nav"
 import { CategoryNav } from "@/components/category-nav"
 import { Footer } from "@/components/footer"
@@ -5,6 +7,7 @@ import { ArticleCard } from "@/components/article-card"
 import { apiClient } from "@/lib/api-client"
 import { generateSEOMetadata } from "@/components/seo-head"
 import { getServerTranslator } from "@/lib/i18n/server"
+import { CategoryPageSkeleton } from "@/components/skeletons/page-skeletons"
 
 export const revalidate = 60
 
@@ -24,8 +27,7 @@ export async function generateMetadata({ params }: PageProps) {
   })
 }
 
-export default async function CategoryPage({ params }: PageProps) {
-  const { slug } = params
+async function CategoryContent({ slug }: { slug: string }) {
   const categories = await apiClient.getCategories()
   const category = categories.find((c) => c.slug === slug)
   const t = getServerTranslator("common")
@@ -37,40 +39,46 @@ export default async function CategoryPage({ params }: PageProps) {
   })
 
   return (
+    <main className="flex-1 py-12">
+      <div className="container">
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold mb-3 text-balance">
+            {category?.name || t("pages.category.fallbackTitle")}
+          </h1>
+          {category?.description && (
+            <p className="text-lg text-muted-foreground text-pretty">{category.description}</p>
+          )}
+          <p className="text-sm text-muted-foreground mt-2">
+            {posts.length === 1
+              ? t("pages.category.countSingular", { count: posts.length })
+              : t("pages.category.countPlural", { count: posts.length })}
+          </p>
+        </div>
+
+        {posts.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {posts.map((post) => (
+              <ArticleCard key={post.id} post={post} />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-12">
+            <p className="text-muted-foreground">{t("pages.category.empty")}</p>
+          </div>
+        )}
+      </div>
+    </main>
+  )
+}
+
+export default function CategoryPage({ params }: PageProps) {
+  return (
     <div className="min-h-screen flex flex-col">
       <TopNav />
       <CategoryNav />
-
-      <main className="flex-1 py-12">
-        <div className="container">
-          <div className="mb-8">
-            <h1 className="text-4xl font-bold mb-3 text-balance">
-              {category?.name || t("pages.category.fallbackTitle")}
-            </h1>
-            {category?.description && (
-              <p className="text-lg text-muted-foreground text-pretty">{category.description}</p>
-            )}
-            <p className="text-sm text-muted-foreground mt-2">
-              {posts.length === 1
-                ? t("pages.category.countSingular", { count: posts.length })
-                : t("pages.category.countPlural", { count: posts.length })}
-            </p>
-          </div>
-
-          {posts.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {posts.map((post) => (
-                <ArticleCard key={post.id} post={post} />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-12">
-              <p className="text-muted-foreground">{t("pages.category.empty")}</p>
-            </div>
-          )}
-        </div>
-      </main>
-
+      <Suspense fallback={<CategoryPageSkeleton />}>
+        <CategoryContent slug={params.slug} />
+      </Suspense>
       <Footer />
     </div>
   )

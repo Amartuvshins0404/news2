@@ -7,6 +7,7 @@ import {
 import { createClient as createBrowserClient } from "./supabase/client";
 import { createClient as createServerClient } from "./supabase/server";
 import { getServiceRoleClient, uploadImage } from "./supabase/storage";
+
 import type {
   Attribute,
   Author,
@@ -58,7 +59,10 @@ type CommentWithRelations = Prisma.CommentGetPayload<{
   };
 }>;
 
-const hasPrismaConnection = Boolean(process.env.DATABASE_URL);
+const hasPrismaConnection =
+  process.env.NODE_ENV === "production"
+    ? false
+    : Boolean(process.env.DATABASE_URL);
 const hasSupabaseCredentials = Boolean(
   process.env.NEXT_PUBLIC_SUPABASE_URL &&
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
@@ -195,25 +199,65 @@ function transformAuthorModel(author: AuthorModel): Author {
 }
 
 let fallbackAuthor: Author | null = null;
+let fallbackAuthorPromise: Promise<Author | null | undefined> | null = null;
 
-void (async () => {
-  try {
-    const firstAuthor = await prisma.author.findFirst({
-      orderBy: { created_at: "asc" },
-    });
-    if (firstAuthor) {
-      fallbackAuthor = transformAuthorModel(firstAuthor);
+async function ensureFallbackAuthor() {
+  if (fallbackAuthor) return fallbackAuthor;
+  if (fallbackAuthorPromise) return fallbackAuthorPromise;
+
+  fallbackAuthorPromise = (async () => {
+    try {
+      const firstAuthor = await prisma.author.findFirst({
+        orderBy: { created_at: "asc" },
+      });
+      if (firstAuthor) {
+        fallbackAuthor = transformAuthorModel(firstAuthor);
+        return fallbackAuthor;
+      }
+    } catch (error) {
+      console.warn(
+        "[supabase-api] Unable to preload fallback author via Prisma – attempting Supabase fallback.",
+        error
+      );
     }
-  } catch (error) {
-    console.warn(
-      "[supabase-api] Unable to preload fallback author – continuing with default placeholder.",
-      error
-    );
+
+    try {
+      const serviceClient = getServiceRoleClient();
+      const { data, error } = await serviceClient
+        .from("authors")
+        .select("id, slug, name, bio, avatar, role, social_links")
+        .order("created_at", { ascending: true })
+        .limit(1);
+      if (error) {
+        handleSupabaseTableError(error, "authors");
+        return fallbackAuthor;
+      }
+      const firstRow = Array.isArray(data) ? data[0] : data;
+      if (firstRow) {
+        fallbackAuthor = mapSupabaseAuthor(firstRow);
+      }
+    } catch (supabaseError) {
+      console.warn(
+        "[supabase-api] Unable to preload fallback author from Supabase service client.",
+        supabaseError
+      );
+    }
+
+    return fallbackAuthor;
+  })();
+
+  try {
+    await fallbackAuthorPromise;
+  } finally {
+    fallbackAuthorPromise = null;
   }
-})();
+
+  return fallbackAuthor;
+}
 
 function mapAuthorEntity(author?: AuthorModel | null): Author {
   if (!author) {
+    void ensureFallbackAuthor();
     if (fallbackAuthor) {
       return fallbackAuthor;
     }
@@ -1265,14 +1309,21 @@ export async function getCommentById(id: string): Promise<Comment | null> {
 let legacyTagCache: Tag[] | null = null;
 
 function mapSupabaseAuthor(row: any): Author {
+  const safeRow = row ?? {};
+  if ((!safeRow.id || !safeRow.name) && !fallbackAuthor) {
+    void ensureFallbackAuthor();
+  }
+  if ((!safeRow.id || !safeRow.name) && fallbackAuthor) {
+    return fallbackAuthor;
+  }
   return {
-    id: row.id,
-    slug: row.slug,
-    name: row.name,
-    bio: row.bio ?? undefined,
-    avatar: row.avatar ?? undefined,
-    role: (row.role as Author["role"]) ?? "editor",
-    social_links: row.social_links ?? undefined,
+    id: safeRow.id ?? "",
+    slug: safeRow.slug ?? "unknown",
+    name: safeRow.name ?? "Unknown Author",
+    bio: safeRow.bio ?? undefined,
+    avatar: safeRow.avatar ?? undefined,
+    role: (safeRow.role as Author["role"]) ?? "editor",
+    social_links: safeRow.social_links ?? undefined,
   };
 }
 
@@ -1410,6 +1461,8 @@ async function legacyGetPosts(params?: {
     handleSupabaseTableError(error, "posts");
   }
 
+  await ensureFallbackAuthor();
+
   const allTags = await legacyGetTagsWithCache();
 
   const posts: Post[] = [];
@@ -1476,6 +1529,8 @@ async function legacyFetchPost(
   }
 
   if (!data) return null;
+
+  await ensureFallbackAuthor();
 
   const allTags = await legacyGetTagsWithCache();
   const postTags = ((data as any).post_tags || [])
@@ -1986,6 +2041,8 @@ async function legacyGetCommentsForPost(postId: string): Promise<Comment[]> {
     handleSupabaseTableError(error, "comments");
   }
 
+  await ensureFallbackAuthor();
+
   return ((data as any[]) || []).map((row) => mapSupabaseComment(row));
 }
 
@@ -2052,6 +2109,8 @@ async function legacyGetRecentComments(limit = 10): Promise<Comment[]> {
   if (error) {
     handleSupabaseTableError(error, "comments");
   }
+
+  await ensureFallbackAuthor();
 
   return ((data as any[]) || []).map((row) => mapSupabaseComment(row));
 }

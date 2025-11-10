@@ -1,3 +1,5 @@
+import { Suspense } from "react"
+
 import { ArticleCard } from "@/components/article-card"
 import { CommentsSection } from "@/components/post/comments-section"
 import { TrackPostView } from "@/components/post/track-post-view"
@@ -12,6 +14,7 @@ import { ArrowLeft, Calendar, Clock, Share2 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
+import { PostPageSkeleton } from "@/components/skeletons/page-skeletons"
 
 export const revalidate = 60
 
@@ -39,8 +42,8 @@ export async function generateMetadata({ params }: PageProps) {
   })
 }
 
-export default async function PostPage({ params }: PageProps) {
-  const post = await getPost(params.slug)
+async function PostPageContent({ slug }: { slug: string }) {
+  const post = await getPost(slug)
   const t = getServerTranslator("common")
 
   if (!post) {
@@ -71,8 +74,7 @@ export default async function PostPage({ params }: PageProps) {
   })
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <TopNav />
+    <>
       <TrackPostView postSlug={post.slug} />
 
       <main className="flex-1">
@@ -185,10 +187,20 @@ export default async function PostPage({ params }: PageProps) {
         )}
       </main>
 
-      <Footer />
-
       {/* JSON-LD Schema */}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
+    </>
+  )
+}
+
+export default function PostPage({ params }: PageProps) {
+  return (
+    <div className="min-h-screen flex flex-col">
+      <TopNav />
+      <Suspense fallback={<PostPageSkeleton />}>
+        <PostPageContent slug={params.slug} />
+      </Suspense>
+      <Footer />
     </div>
   )
 }
