@@ -9,11 +9,11 @@ import { getServerTranslator } from "@/lib/i18n/server"
 export const revalidate = 60
 
 interface PageProps {
-  params: Promise<{ slug: string }>
+  params: { slug: string }
 }
 
 export async function generateMetadata({ params }: PageProps) {
-  const { slug } = await params
+  const { slug } = params
   const categories = await apiClient.getCategories()
   const category = categories.find((c) => c.slug === slug)
   const t = getServerTranslator("common")
@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: PageProps) {
 }
 
 export default async function CategoryPage({ params }: PageProps) {
-  const { slug } = await params
+  const { slug } = params
   const categories = await apiClient.getCategories()
   const category = categories.find((c) => c.slug === slug)
   const t = getServerTranslator("common")

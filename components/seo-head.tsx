@@ -42,7 +42,7 @@ export function generateSEOMetadata({
       description,
       images: [ogImage],
     },
-    ...(author && { authors: [author] }),
+    ...(author && { authors: [{ name: author }] }),
   }
 }
 

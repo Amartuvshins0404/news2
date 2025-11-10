@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from "react"
 import type React from "react"
-import type { User as SupabaseUser } from "@supabase/supabase-js"
+import type { AuthChangeEvent, Session, User as SupabaseUser } from "@supabase/supabase-js"
 import { createClient } from "@/lib/supabase/client"
 
 export interface User {
@@ -22,7 +22,7 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-function mapUser(user: SupabaseUser | null): User | null {
+function mapUser(user: SupabaseUser | null | undefined): User | null {
   if (!user) return null
 
   const metadata = user.user_metadata || {}
@@ -51,16 +51,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const supabase = createClient()
 
-    supabase.auth
-      .getSession()
-      .then(({ data }) => {
+    const loadSession = async () => {
+      try {
+        const { data } = await supabase.auth.getSession()
         setUser(mapUser(data.session?.user) ?? null)
-      })
-      .finally(() => setLoading(false))
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    void loadSession()
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    } = supabase.auth.onAuthStateChange((_event: AuthChangeEvent, session: Session | null) => {
       setUser(mapUser(session?.user) ?? null)
       setLoading(false)
     })

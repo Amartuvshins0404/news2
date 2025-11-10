@@ -16,11 +16,11 @@ import { notFound } from "next/navigation"
 export const revalidate = 60
 
 interface PageProps {
-  params: Promise<{ slug: string }>
+  params: { slug: string }
 }
 
 export async function generateMetadata({ params }: PageProps) {
-  const { slug } = await params
+  const { slug } = params
   const post = await getPost(slug)
   const t = getServerTranslator("common")
 
@@ -40,8 +40,7 @@ export async function generateMetadata({ params }: PageProps) {
 }
 
 export default async function PostPage({ params }: PageProps) {
-  const { slug } = await params
-  const post = await getPost(slug)
+  const post = await getPost(params.slug)
   const t = getServerTranslator("common")
 
   if (!post) {

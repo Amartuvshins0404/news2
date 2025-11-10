@@ -3,14 +3,9 @@ import { NextResponse } from "next/server"
 import { createErrorResponse } from "@/lib/api/error-response"
 import { createComment, getCommentById, getCommentsForPost, getPost } from "@/lib/supabase-api"
 
-interface RouteContext {
-  params: Promise<{ slug: string }>
-}
-
-export async function GET(_: Request, context: RouteContext) {
+export async function GET(_: Request, context: { params: { slug: string } }) {
   try {
-    const { slug } = await context.params
-    const post = await getPost(slug)
+    const post = await getPost(context.params.slug)
     if (!post) {
       return NextResponse.json({ error: "Post not found" }, { status: 404 })
     }
@@ -22,10 +17,9 @@ export async function GET(_: Request, context: RouteContext) {
   }
 }
 
-export async function POST(request: Request, context: RouteContext) {
+export async function POST(request: Request, context: { params: { slug: string } }) {
   try {
-    const { slug } = await context.params
-    const post = await getPost(slug)
+    const post = await getPost(context.params.slug)
     if (!post) {
       return NextResponse.json({ error: "Post not found" }, { status: 404 })
     }

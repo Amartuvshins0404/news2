@@ -4,22 +4,17 @@ import { createErrorResponse } from "@/lib/api/error-response"
 import { requireAdminUser } from "@/lib/auth/server"
 import { deleteComment, getCommentById, getCommentsForPost } from "@/lib/supabase-api"
 
-interface RouteContext {
-  params: Promise<{ id: string }>
-}
-
-export async function DELETE(_: Request, context: RouteContext) {
+export async function DELETE(_: Request, context: { params: { id: string } }) {
   try {
     const guard = await requireAdminUser()
     if (guard.response) return guard.response
 
-    const { id } = await context.params
-    const comment = await getCommentById(id)
+    const comment = await getCommentById(context.params.id)
     if (!comment) {
       return NextResponse.json({ error: "Comment not found" }, { status: 404 })
     }
 
-    await deleteComment(id)
+    await deleteComment(context.params.id)
     const updated = await getCommentsForPost(comment.post_id)
 
     return NextResponse.json(

@@ -1,12 +1,9 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Roboto } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { ThemeProvider } from "@/lib/theme-provider"
 import { Toaster } from "sonner"
 import "./globals.css"
-
-const _roboto = Roboto({ weight: ["400", "500", "700"], subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: "AuroraNews - Latest News & Insights",

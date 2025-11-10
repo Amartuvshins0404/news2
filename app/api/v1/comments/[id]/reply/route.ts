@@ -4,11 +4,7 @@ import { createErrorResponse } from "@/lib/api/error-response"
 import { requireAdminUser } from "@/lib/auth/server"
 import { createComment, getAuthorById, getCommentById } from "@/lib/supabase-api"
 
-interface RouteContext {
-  params: Promise<{ id: string }>
-}
-
-export async function POST(request: Request, context: RouteContext) {
+export async function POST(request: Request, context: { params: { id: string } }) {
   try {
     const guard = await requireAdminUser()
     if (guard.response) return guard.response
@@ -24,8 +20,7 @@ export async function POST(request: Request, context: RouteContext) {
       )
     }
 
-    const { id } = await context.params
-    const comment = await getCommentById(id)
+    const comment = await getCommentById(context.params.id)
     if (!comment) {
       return NextResponse.json({ error: "Comment not found" }, { status: 404 })
     }

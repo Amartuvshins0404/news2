@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server"
+
 import { getPost } from "@/lib/supabase-api"
 
 function errorResponse(error: unknown, status = 500) {
@@ -7,9 +8,9 @@ function errorResponse(error: unknown, status = 500) {
   return NextResponse.json({ error: message }, { status })
 }
 
-export async function GET(_: Request, { params }: { params: { slug: string } }) {
+export async function GET(_: Request, context: { params: { slug: string } }) {
   try {
-    const post = await getPost(params.slug)
+    const post = await getPost(context.params.slug)
     if (!post) {
       return errorResponse(new Error("Post not found"), 404)
     }
