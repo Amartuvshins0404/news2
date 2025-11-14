@@ -21,6 +21,64 @@ interface RichTextEditorFieldProps {
   placeholder?: string
 }
 
+function convertToMuiColor(color: string): string {
+  // If color is already in a supported format, return as-is
+  const supportedFormats = ["#", "rgb", "rgba", "hsl", "hsla", "color("]
+  const isSupported = supportedFormats.some((format) => color.trim().toLowerCase().startsWith(format))
+
+  if (isSupported) {
+    return color
+  }
+
+  // If it's oklch or another unsupported format, convert to rgb using canvas
+  if (typeof window === "undefined") {
+    return color
+  }
+
+  // Always try to convert using canvas (works for any CSS color format)
+  try {
+    const canvas = document.createElement("canvas")
+    canvas.width = 1
+    canvas.height = 1
+    const ctx = canvas.getContext("2d")
+    if (ctx) {
+      ctx.fillStyle = color
+      ctx.fillRect(0, 0, 1, 1)
+      const imageData = ctx.getImageData(0, 0, 1, 1)
+      const [r, g, b, a] = imageData.data
+
+      // Return rgba format
+      if (a === 255) {
+        return `rgb(${r}, ${g}, ${b})`
+      } else {
+        return `rgba(${r}, ${g}, ${b}, ${(a / 255).toFixed(3)})`
+      }
+    }
+  } catch (error) {
+    // If canvas conversion fails, try computed style as fallback
+    try {
+      const tempElement = document.createElement("div")
+      tempElement.style.position = "absolute"
+      tempElement.style.visibility = "hidden"
+      tempElement.style.pointerEvents = "none"
+      tempElement.style.color = color
+      document.body.appendChild(tempElement)
+      const computed = getComputedStyle(tempElement).color
+      document.body.removeChild(tempElement)
+
+      // Recursively convert if still unsupported
+      if (computed && computed !== color) {
+        return convertToMuiColor(computed)
+      }
+    } catch {
+      // Fall through
+    }
+  }
+
+  // Last resort: return original (might cause error but better than crashing)
+  return color
+}
+
 function resolveCssVar(
   variableName: string,
   fallback: string,
@@ -41,7 +99,10 @@ function resolveCssVar(
   container.appendChild(element)
   const computed = getComputedStyle(element)[property] || fallback
   element.remove()
-  return typeof computed === "string" && computed.trim().length > 0 ? computed : fallback
+  const color = typeof computed === "string" && computed.trim().length > 0 ? computed : fallback
+
+  // Convert oklch to MUI-supported format
+  return convertToMuiColor(color)
 }
 
 function resolveCssValue(variableName: string, fallback: string) {
@@ -152,20 +213,29 @@ export function RichTextEditorField({ value, onChange, placeholder }: RichTextEd
         : "0 22px 48px -28px rgba(15, 23, 42, 0.18)"
     )
 
+    // Ensure all colors are converted to MUI-supported formats
+    const safePalettePrimary = convertToMuiColor(palettePrimary)
+    const safePaletteSecondary = convertToMuiColor(paletteSecondary)
+    const safeDivider = convertToMuiColor(divider)
+    const safePaper = convertToMuiColor(paper)
+    const safeBackgroundDefault = convertToMuiColor(backgroundDefault)
+    const safeTextPrimary = convertToMuiColor(textPrimary)
+    const safeTextSecondary = convertToMuiColor(textSecondary)
+
     return createTheme({
       palette: {
         mode: isDarkMode ? "dark" : "light",
-        primary: { main: palettePrimary },
-        secondary: { main: paletteSecondary },
+        primary: { main: safePalettePrimary },
+        secondary: { main: safePaletteSecondary },
         background: {
-          default: backgroundDefault,
-          paper,
+          default: safeBackgroundDefault,
+          paper: safePaper,
         },
         text: {
-          primary: textPrimary,
-          secondary: textSecondary,
+          primary: safeTextPrimary,
+          secondary: safeTextSecondary,
         },
-        divider,
+        divider: safeDivider,
       },
       typography: {
         fontFamily: "var(--font-sans, Inter, Roboto, sans-serif)",
@@ -175,10 +245,10 @@ export function RichTextEditorField({ value, onChange, placeholder }: RichTextEd
           styleOverrides: {
             root: {
               backgroundImage: "none",
-              backgroundColor: paper,
-              color: textPrimary,
+              backgroundColor: safePaper,
+              color: safeTextPrimary,
               borderRadius: 12,
-              border: `1px solid ${divider}`,
+              border: `1px solid ${safeDivider}`,
               boxShadow: shadow,
             },
           },
@@ -188,10 +258,10 @@ export function RichTextEditorField({ value, onChange, placeholder }: RichTextEd
             root: {
               borderRadius: 8,
               "&.Mui-selected": {
-                backgroundColor: toolbarSelectedBg,
+                backgroundColor: convertToMuiColor(toolbarSelectedBg),
               },
               "&.Mui-selected:hover": {
-                backgroundColor: toolbarSelectedHoverBg,
+                backgroundColor: convertToMuiColor(toolbarSelectedHoverBg),
               },
             },
           },
@@ -199,8 +269,8 @@ export function RichTextEditorField({ value, onChange, placeholder }: RichTextEd
         MuiListSubheader: {
           styleOverrides: {
             root: {
-              backgroundColor: paper,
-              color: textSecondary,
+              backgroundColor: safePaper,
+              color: safeTextSecondary,
             },
           },
         },
