@@ -30,7 +30,12 @@ export async function PATCH(request: Request, { params }: ParamsContext) {
 
     const { id } = await params
     const body = await request.json()
-    const post = await updatePost(id, body)
+
+    // Security: Prevent author_id from being changed to prevent impersonation
+    // Remove author_id if present in request body (author_id cannot be changed after post creation)
+    const { author_id, ...safeBody } = body
+
+    const post = await updatePost(id, safeBody)
     return NextResponse.json(post)
   } catch (error) {
     return createErrorResponse("[api/v1/posts/[id]]", error)

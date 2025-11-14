@@ -39,7 +39,15 @@ export async function POST(request: Request) {
     if (guard.response) return guard.response
 
     const body = await request.json()
-    const post = await createPost(body)
+
+    // Security: Always use the authenticated user's author ID to prevent impersonation
+    // Ignore any author_id provided in the request body
+    const secureBody = {
+      ...body,
+      author_id: guard.user.id, // Use authenticated user's ID, not from request body
+    }
+
+    const post = await createPost(secureBody)
     return NextResponse.json(post, { status: 201 })
   } catch (error) {
     return createErrorResponse("[api/v1/posts]", error)
