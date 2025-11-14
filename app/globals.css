@@ -4,40 +4,40 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Updated to sophisticated news platform color scheme inspired by editorial design */
-  --background: oklch(0.99 0 0);
-  --foreground: oklch(0.12 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.12 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.12 0 0);
-  --primary: oklch(0.35 0.08 260);
-  --primary-foreground: oklch(0.99 0 0);
-  --secondary: oklch(0.92 0.01 260);
-  --secondary-foreground: oklch(0.12 0 0);
-  --muted: oklch(0.96 0.005 260);
-  --muted-foreground: oklch(0.48 0.02 260);
-  --accent: oklch(0.95 0.01 260);
-  --accent-foreground: oklch(0.12 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.99 0 0);
-  --border: oklch(0.88 0.01 260);
-  --input: oklch(0.88 0.01 260);
-  --ring: oklch(0.35 0.08 260);
+  /* Color theme: Primary Blue #163D63, Accent Red #E23B2F, Light Gray #F5F6F7 */
+  --background: rgb(255, 255, 255);
+  --foreground: rgb(22, 61, 99);
+  --card: rgb(255, 255, 255);
+  --card-foreground: rgb(22, 61, 99);
+  --popover: rgb(255, 255, 255);
+  --popover-foreground: rgb(22, 61, 99);
+  --primary: rgb(22, 61, 99);
+  --primary-foreground: rgb(255, 255, 255);
+  --secondary: rgb(245, 246, 247);
+  --secondary-foreground: rgb(22, 61, 99);
+  --muted: rgb(245, 246, 247);
+  --muted-foreground: rgb(107, 114, 128);
+  --accent: rgb(245, 246, 247);
+  --accent-foreground: rgb(22, 61, 99);
+  --destructive: rgb(226, 59, 47);
+  --destructive-foreground: rgb(255, 255, 255);
+  --border: rgb(229, 231, 235);
+  --input: rgb(229, 231, 235);
+  --ring: rgb(22, 61, 99);
   --chart-1: oklch(0.55 0.15 260);
   --chart-2: oklch(0.6 0.12 200);
   --chart-3: oklch(0.65 0.1 280);
   --chart-4: oklch(0.7 0.08 240);
   --chart-5: oklch(0.6 0.14 220);
   --radius: 0.5rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.35 0.08 260);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --sidebar: rgb(245, 246, 247);
+  --sidebar-foreground: rgb(22, 61, 99);
+  --sidebar-primary: rgb(22, 61, 99);
+  --sidebar-primary-foreground: rgb(255, 255, 255);
+  --sidebar-accent: rgb(255, 255, 255);
+  --sidebar-accent-foreground: rgb(22, 61, 99);
+  --sidebar-border: rgb(229, 231, 235);
+  --sidebar-ring: rgb(22, 61, 99);
   --editor-surface: color-mix(in oklch, var(--card) 98%, white 2%);
   --editor-surface-alt: color-mix(in oklch, var(--card) 94%, white 6%);
   --editor-border-subtle: color-mix(
@@ -203,39 +203,39 @@
 }
 
 .dark {
-  /* Refined dark mode colors for elegant editorial aesthetic */
-  --background: oklch(0.13 0.01 260);
-  --foreground: oklch(0.95 0.01 260);
-  --card: oklch(0.16 0.015 260);
-  --card-foreground: oklch(0.95 0.01 260);
-  --popover: oklch(0.16 0.015 260);
-  --popover-foreground: oklch(0.95 0.01 260);
-  --primary: oklch(0.75 0.12 260);
-  --primary-foreground: oklch(0.13 0.01 260);
-  --secondary: oklch(0.22 0.02 260);
-  --secondary-foreground: oklch(0.95 0.01 260);
-  --muted: oklch(0.2 0.02 260);
-  --muted-foreground: oklch(0.65 0.03 260);
-  --accent: oklch(0.24 0.025 260);
-  --accent-foreground: oklch(0.95 0.01 260);
-  --destructive: oklch(0.5 0.2 27);
-  --destructive-foreground: oklch(0.95 0.01 260);
-  --border: oklch(0.25 0.02 260);
-  --input: oklch(0.25 0.02 260);
-  --ring: oklch(0.75 0.12 260);
+  /* Dark mode: Dark Gray #1B1E22 background with Primary Blue accents */
+  --background: rgb(27, 30, 34);
+  --foreground: rgb(245, 246, 247);
+  --card: rgb(35, 38, 42);
+  --card-foreground: rgb(245, 246, 247);
+  --popover: rgb(35, 38, 42);
+  --popover-foreground: rgb(245, 246, 247);
+  --primary: rgb(96, 165, 250);
+  --primary-foreground: rgb(27, 30, 34);
+  --secondary: rgb(45, 48, 52);
+  --secondary-foreground: rgb(245, 246, 247);
+  --muted: rgb(45, 48, 52);
+  --muted-foreground: rgb(156, 163, 175);
+  --accent: rgb(45, 48, 52);
+  --accent-foreground: rgb(245, 246, 247);
+  --destructive: rgb(239, 68, 68);
+  --destructive-foreground: rgb(245, 246, 247);
+  --border: rgb(55, 58, 62);
+  --input: rgb(55, 58, 62);
+  --ring: rgb(96, 165, 250);
   --chart-1: oklch(0.6 0.18 260);
   --chart-2: oklch(0.65 0.15 200);
   --chart-3: oklch(0.7 0.12 280);
   --chart-4: oklch(0.75 0.1 240);
   --chart-5: oklch(0.65 0.16 220);
-  --sidebar: oklch(0.16 0.015 260);
-  --sidebar-foreground: oklch(0.95 0.01 260);
-  --sidebar-primary: oklch(0.75 0.12 260);
-  --sidebar-primary-foreground: oklch(0.13 0.01 260);
-  --sidebar-accent: oklch(0.22 0.02 260);
-  --sidebar-accent-foreground: oklch(0.95 0.01 260);
-  --sidebar-border: oklch(0.25 0.02 260);
-  --sidebar-ring: oklch(0.75 0.12 260);
+  --sidebar: rgb(35, 38, 42);
+  --sidebar-foreground: rgb(245, 246, 247);
+  --sidebar-primary: rgb(96, 165, 250);
+  --sidebar-primary-foreground: rgb(27, 30, 34);
+  --sidebar-accent: rgb(45, 48, 52);
+  --sidebar-accent-foreground: rgb(245, 246, 247);
+  --sidebar-border: rgb(55, 58, 62);
+  --sidebar-ring: rgb(96, 165, 250);
   --editor-surface: color-mix(in oklch, var(--card) 85%, white 15%);
   --editor-surface-alt: color-mix(in oklch, var(--card) 82%, white 18%);
   --editor-border-subtle: color-mix(
