@@ -1,6 +1,6 @@
 {
   "brand": {
-    "name": "AuroraNews"
+    "name": "Vo!ces"
   },
   "common": {
     "error": "Error",
@@ -89,10 +89,10 @@
       "goHome": "Back to homepage"
     },
     "about": {
-      "metaTitle": "About AuroraNews",
-      "metaDescription": "Learn more about AuroraNews and our mission to deliver quality journalism.",
-      "heading": "About AuroraNews",
-      "intro": "AuroraNews is a modern news platform dedicated to delivering high-quality journalism and insightful analysis on the topics that matter most.",
+      "metaTitle": "About Vo!ces",
+      "metaDescription": "Learn more about Vo!ces and our mission to deliver quality journalism.",
+      "heading": "About Vo!ces",
+      "intro": "Vo!ces is a modern news platform dedicated to delivering high-quality journalism and insightful analysis on the topics that matter most.",
       "missionTitle": "Our Mission",
       "missionBody": "We believe in the power of informed discourse and the importance of accessible, accurate reporting. Our team of experienced journalists and contributors work tirelessly to bring you stories that inform, inspire, and engage.",
       "coverageTitle": "What We Cover",
@@ -107,7 +107,7 @@
     },
     "contact": {
       "metaTitle": "Contact Us",
-      "metaDescription": "Get in touch with the AuroraNews team.",
+      "metaDescription": "Get in touch with the Vo!ces team.",
       "heading": "Contact Us",
       "intro": "Have a question or feedback? We'd love to hear from you.",
       "form": {
@@ -124,12 +124,12 @@
     },
     "editorial": {
       "metaTitle": "Editorial Policy",
-      "metaDescription": "AuroraNews editorial standards and guidelines.",
+      "metaDescription": "Vo!ces editorial standards and guidelines.",
       "heading": "Editorial Policy",
       "sections": {
         "standards": {
           "title": "Our Standards",
-          "body": "AuroraNews is committed to maintaining the highest standards of journalism. We strive for accuracy, fairness, and transparency in all our reporting."
+          "body": "Vo!ces is committed to maintaining the highest standards of journalism. We strive for accuracy, fairness, and transparency in all our reporting."
         },
         "accuracy": {
           "title": "Accuracy",
@@ -147,7 +147,7 @@
     },
     "privacy": {
       "metaTitle": "Privacy Policy",
-      "metaDescription": "AuroraNews privacy policy and data handling practices.",
+      "metaDescription": "Vo!ces privacy policy and data handling practices.",
       "heading": "Privacy Policy",
       "lastUpdated": "Last updated: January 2025",
       "sections": {
@@ -157,7 +157,7 @@
         },
         "usage": {
           "title": "How We Use Your Information",
-          "body": "We use the information we collect to provide, maintain, and improve our services, to communicate with you, and to protect AuroraNews and our users."
+          "body": "We use the information we collect to provide, maintain, and improve our services, to communicate with you, and to protect Vo!ces and our users."
         },
         "security": {
           "title": "Data Security",

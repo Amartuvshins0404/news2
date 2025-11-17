@@ -6,7 +6,7 @@ import { Toaster } from "sonner"
 import "./globals.css"
 
 export const metadata: Metadata = {
-  title: "AuroraNews - Latest News & Insights",
+  title: "Vo!ces - Latest News & Insights",
   description: "Stay informed with the latest news, analysis, and insights from around the world",
   generator: "v0.app",
   icons: {

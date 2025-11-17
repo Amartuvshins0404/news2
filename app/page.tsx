@@ -24,12 +24,12 @@ async function HomeContent() {
   const regularPosts = posts.filter((p) => p.id !== featuredPost?.id).slice(0, 8)
 
   return (
-    <main className="flex-1">
-      <HomeHero featuredPost={featuredPost} />
-      <HomeTrending posts={trendingPosts} />
-      <HomeLatest posts={regularPosts} />
-      <HomeNewsletter />
-    </main>
+      <main className="flex-1">
+        <HomeHero featuredPost={featuredPost} />
+        <HomeTrending posts={trendingPosts} />
+        <HomeLatest posts={regularPosts} />
+        <HomeNewsletter />
+      </main>
   )
 }
 

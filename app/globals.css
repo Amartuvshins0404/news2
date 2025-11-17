@@ -4,14 +4,14 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Color theme: Primary Blue #163D63, Accent Red #E23B2F, Light Gray #F5F6F7 */
+  /* Color theme: Primary Blue #163D63 (text), Accent Red #E23B2F (interactive), Light Gray #F5F6F7 */
   --background: rgb(255, 255, 255);
   --foreground: rgb(22, 61, 99);
   --card: rgb(255, 255, 255);
   --card-foreground: rgb(22, 61, 99);
   --popover: rgb(255, 255, 255);
   --popover-foreground: rgb(22, 61, 99);
-  --primary: rgb(22, 61, 99);
+  --primary: rgb(226, 59, 47);
   --primary-foreground: rgb(255, 255, 255);
   --secondary: rgb(245, 246, 247);
   --secondary-foreground: rgb(22, 61, 99);
@@ -23,7 +23,7 @@
   --destructive-foreground: rgb(255, 255, 255);
   --border: rgb(229, 231, 235);
   --input: rgb(229, 231, 235);
-  --ring: rgb(22, 61, 99);
+  --ring: rgb(226, 59, 47);
   --chart-1: oklch(0.55 0.15 260);
   --chart-2: oklch(0.6 0.12 200);
   --chart-3: oklch(0.65 0.1 280);
@@ -32,185 +32,185 @@
   --radius: 0.5rem;
   --sidebar: rgb(245, 246, 247);
   --sidebar-foreground: rgb(22, 61, 99);
-  --sidebar-primary: rgb(22, 61, 99);
+  --sidebar-primary: rgb(226, 59, 47);
   --sidebar-primary-foreground: rgb(255, 255, 255);
   --sidebar-accent: rgb(255, 255, 255);
   --sidebar-accent-foreground: rgb(22, 61, 99);
   --sidebar-border: rgb(229, 231, 235);
-  --sidebar-ring: rgb(22, 61, 99);
-  --editor-surface: color-mix(in oklch, var(--card) 98%, white 2%);
-  --editor-surface-alt: color-mix(in oklch, var(--card) 94%, white 6%);
+  --sidebar-ring: rgb(226, 59, 47);
+  --editor-surface: color-mix(in srgb, var(--card) 98%, white 2%);
+  --editor-surface-alt: color-mix(in srgb, var(--card) 94%, white 6%);
   --editor-border-subtle: color-mix(
-    in oklch,
+    in srgb,
     var(--border) 80%,
     transparent 20%
   );
   --editor-border-strong: color-mix(
-    in oklch,
+    in srgb,
     var(--border) 65%,
     transparent 35%
   );
-  --editor-shadow: 0 28px 80px -48px color-mix(in oklch, var(--foreground) 12%, transparent
+  --editor-shadow: 0 28px 80px -48px color-mix(in srgb, var(--foreground) 12%, transparent
         88%);
   --editor-toolbar-bg: color-mix(
-    in oklch,
+    in srgb,
     var(--card) 96%,
     var(--background) 4%
   );
   --editor-toolbar-divider: color-mix(
-    in oklch,
+    in srgb,
     var(--border) 70%,
     transparent 30%
   );
   --editor-toolbar-button-hover-bg: color-mix(
-    in oklch,
+    in srgb,
     var(--accent) 25%,
     transparent 75%
   );
   --editor-toolbar-button-hover-border: color-mix(
-    in oklch,
+    in srgb,
     var(--primary) 35%,
     transparent 65%
   );
   --editor-toolbar-button-hover-color: color-mix(
-    in oklch,
+    in srgb,
     var(--primary) 60%,
     var(--foreground) 40%
   );
   --editor-toolbar-button-disabled: color-mix(
-    in oklch,
+    in srgb,
     var(--muted-foreground) 65%,
     var(--foreground) 35%
   );
   --editor-toolbar-input-bg: color-mix(
-    in oklch,
+    in srgb,
     var(--background) 96%,
     white 4%
   );
   --editor-toolbar-input-border: color-mix(
-    in oklch,
+    in srgb,
     var(--border) 82%,
     transparent 18%
   );
   --editor-toolbar-input-border-hover: color-mix(
-    in oklch,
+    in srgb,
     var(--primary) 45%,
     var(--border) 55%
   );
   --editor-toolbar-input-icon: color-mix(
-    in oklch,
+    in srgb,
     var(--muted-foreground) 75%,
     var(--foreground) 25%
   );
-  --editor-content-bg: color-mix(in oklch, var(--background) 99%, white 1%);
-  --editor-content-color: color-mix(in oklch, var(--foreground) 92%, black 8%);
+  --editor-content-bg: color-mix(in srgb, var(--background) 99%, white 1%);
+  --editor-content-color: color-mix(in srgb, var(--foreground) 92%, black 8%);
   --editor-content-muted: color-mix(
-    in oklch,
+    in srgb,
     var(--muted-foreground) 92%,
     var(--foreground) 8%
   );
-  --editor-heading-color: color-mix(in oklch, var(--foreground) 96%, black 4%);
+  --editor-heading-color: color-mix(in srgb, var(--foreground) 96%, black 4%);
   --editor-link-color: color-mix(
-    in oklch,
+    in srgb,
     var(--primary) 70%,
     var(--foreground) 30%
   );
   --editor-link-hover-color: color-mix(
-    in oklch,
+    in srgb,
     var(--primary) 82%,
     var(--foreground) 18%
   );
-  --editor-hr-color: color-mix(in oklch, var(--border) 88%, transparent 12%);
+  --editor-hr-color: color-mix(in srgb, var(--border) 88%, transparent 12%);
   --editor-blockquote-bg: color-mix(
-    in oklch,
+    in srgb,
     var(--accent) 60%,
     transparent 40%
   );
   --editor-blockquote-border: color-mix(
-    in oklch,
+    in srgb,
     var(--primary) 40%,
     var(--accent) 60%
   );
-  --editor-code-bg: color-mix(in oklch, var(--accent) 50%, transparent 50%);
+  --editor-code-bg: color-mix(in srgb, var(--accent) 50%, transparent 50%);
   --editor-code-border: color-mix(
-    in oklch,
+    in srgb,
     var(--primary) 30%,
     transparent 70%
   );
   --editor-code-color: color-mix(
-    in oklch,
+    in srgb,
     var(--primary) 55%,
     var(--foreground) 45%
   );
-  --editor-pre-bg: color-mix(in oklch, var(--background) 95%, var(--accent) 5%);
-  --editor-pre-border: color-mix(in oklch, var(--primary) 28%, transparent 72%);
-  --editor-image-shadow: 0 18px 60px -42px color-mix(in oklch, var(--foreground)
+  --editor-pre-bg: color-mix(in srgb, var(--background) 95%, var(--accent) 5%);
+  --editor-pre-border: color-mix(in srgb, var(--primary) 28%, transparent 72%);
+  --editor-image-shadow: 0 18px 60px -42px color-mix(in srgb, var(--foreground)
         18%, transparent 82%);
   --editor-list-marker: color-mix(
-    in oklch,
+    in srgb,
     var(--primary) 75%,
     var(--foreground) 25%
   );
   --editor-table-header-bg: color-mix(
-    in oklch,
+    in srgb,
     var(--accent) 55%,
     transparent 45%
   );
   --editor-table-cell-border: color-mix(
-    in oklch,
+    in srgb,
     var(--border) 85%,
     transparent 15%
   );
   --editor-selection-bg: color-mix(
-    in oklch,
+    in srgb,
     var(--primary) 25%,
     transparent 75%
   );
   --editor-selection-color: color-mix(
-    in oklch,
+    in srgb,
     var(--primary-foreground) 80%,
     var(--foreground) 20%
   );
-  --editor-tag-bg: color-mix(in oklch, var(--accent) 55%, transparent 45%);
+  --editor-tag-bg: color-mix(in srgb, var(--accent) 55%, transparent 45%);
   --editor-tag-color: color-mix(
-    in oklch,
+    in srgb,
     var(--accent-foreground) 80%,
     var(--foreground) 20%
   );
-  --editor-followup-bg: color-mix(in oklch, var(--card) 97%, white 3%);
-  --editor-followup-border: color-mix(in oklch, var(--border) 70%, transparent 30%);
-  --editor-icon-button-bg: color-mix(in oklch, var(--background) 95%, white 5%);
+  --editor-followup-bg: color-mix(in srgb, var(--card) 97%, white 3%);
+  --editor-followup-border: color-mix(in srgb, var(--border) 70%, transparent 30%);
+  --editor-icon-button-bg: color-mix(in srgb, var(--background) 95%, white 5%);
   --editor-icon-button-border: color-mix(
-    in oklch,
+    in srgb,
     var(--border) 82%,
     transparent 18%
   );
   --editor-icon-button-hover-bg: color-mix(
-    in oklch,
+    in srgb,
     var(--accent) 35%,
     transparent 65%
   );
   --editor-icon-button-hover-border: color-mix(
-    in oklch,
+    in srgb,
     var(--primary) 35%,
     transparent 65%
   );
   --editor-author-divider: color-mix(
-    in oklch,
+    in srgb,
     var(--border) 85%,
     transparent 15%
   );
 }
 
 .dark {
-  /* Dark mode: Dark Gray #1B1E22 background with Primary Blue accents */
+  /* Dark mode: Dark Gray #1B1E22 background with Accent Red for interactive elements */
   --background: rgb(27, 30, 34);
   --foreground: rgb(245, 246, 247);
   --card: rgb(35, 38, 42);
   --card-foreground: rgb(245, 246, 247);
   --popover: rgb(35, 38, 42);
   --popover-foreground: rgb(245, 246, 247);
-  --primary: rgb(96, 165, 250);
+  --primary: rgb(248, 113, 101);
   --primary-foreground: rgb(27, 30, 34);
   --secondary: rgb(45, 48, 52);
   --secondary-foreground: rgb(245, 246, 247);
@@ -218,11 +218,11 @@
   --muted-foreground: rgb(156, 163, 175);
   --accent: rgb(45, 48, 52);
   --accent-foreground: rgb(245, 246, 247);
-  --destructive: rgb(239, 68, 68);
+  --destructive: rgb(248, 113, 101);
   --destructive-foreground: rgb(245, 246, 247);
   --border: rgb(55, 58, 62);
   --input: rgb(55, 58, 62);
-  --ring: rgb(96, 165, 250);
+  --ring: rgb(248, 113, 101);
   --chart-1: oklch(0.6 0.18 260);
   --chart-2: oklch(0.65 0.15 200);
   --chart-3: oklch(0.7 0.12 280);
@@ -230,171 +230,171 @@
   --chart-5: oklch(0.65 0.16 220);
   --sidebar: rgb(35, 38, 42);
   --sidebar-foreground: rgb(245, 246, 247);
-  --sidebar-primary: rgb(96, 165, 250);
+  --sidebar-primary: rgb(248, 113, 101);
   --sidebar-primary-foreground: rgb(27, 30, 34);
   --sidebar-accent: rgb(45, 48, 52);
   --sidebar-accent-foreground: rgb(245, 246, 247);
   --sidebar-border: rgb(55, 58, 62);
-  --sidebar-ring: rgb(96, 165, 250);
-  --editor-surface: color-mix(in oklch, var(--card) 85%, white 15%);
-  --editor-surface-alt: color-mix(in oklch, var(--card) 82%, white 18%);
+  --sidebar-ring: rgb(248, 113, 101);
+  --editor-surface: color-mix(in srgb, var(--card) 85%, white 15%);
+  --editor-surface-alt: color-mix(in srgb, var(--card) 82%, white 18%);
   --editor-border-subtle: color-mix(
-    in oklch,
+    in srgb,
     var(--border) 75%,
     transparent 25%
   );
   --editor-border-strong: color-mix(
-    in oklch,
+    in srgb,
     var(--border) 55%,
     transparent 45%
   );
-  --editor-shadow: 0 28px 80px -48px color-mix(in oklch, black 70%, transparent
+  --editor-shadow: 0 28px 80px -48px color-mix(in srgb, black 70%, transparent
         30%);
-  --editor-toolbar-bg: color-mix(in oklch, var(--background) 78%, white 22%);
+  --editor-toolbar-bg: color-mix(in srgb, var(--background) 78%, white 22%);
   --editor-toolbar-divider: color-mix(
-    in oklch,
+    in srgb,
     var(--border) 60%,
     transparent 40%
   );
   --editor-toolbar-button-hover-bg: color-mix(
-    in oklch,
+    in srgb,
     var(--primary) 30%,
     transparent 70%
   );
   --editor-toolbar-button-hover-border: color-mix(
-    in oklch,
+    in srgb,
     var(--primary) 40%,
     transparent 60%
   );
   --editor-toolbar-button-hover-color: color-mix(
-    in oklch,
+    in srgb,
     var(--primary-foreground) 75%,
     var(--foreground) 25%
   );
   --editor-toolbar-button-disabled: color-mix(
-    in oklch,
+    in srgb,
     var(--muted-foreground) 70%,
     var(--foreground) 30%
   );
   --editor-toolbar-input-bg: color-mix(
-    in oklch,
+    in srgb,
     var(--background) 70%,
     white 30%
   );
   --editor-toolbar-input-border: color-mix(
-    in oklch,
+    in srgb,
     var(--border) 70%,
     transparent 30%
   );
   --editor-toolbar-input-border-hover: color-mix(
-    in oklch,
+    in srgb,
     var(--primary) 50%,
     var(--border) 50%
   );
   --editor-toolbar-input-icon: color-mix(
-    in oklch,
+    in srgb,
     var(--muted-foreground) 70%,
     var(--foreground) 30%
   );
-  --editor-content-bg: color-mix(in oklch, var(--background) 84%, white 16%);
-  --editor-content-color: color-mix(in oklch, var(--foreground) 95%, white 5%);
+  --editor-content-bg: color-mix(in srgb, var(--background) 84%, white 16%);
+  --editor-content-color: color-mix(in srgb, var(--foreground) 95%, white 5%);
   --editor-content-muted: color-mix(
-    in oklch,
+    in srgb,
     var(--muted-foreground) 88%,
     var(--foreground) 12%
   );
-  --editor-heading-color: color-mix(in oklch, var(--foreground) 98%, white 2%);
+  --editor-heading-color: color-mix(in srgb, var(--foreground) 98%, white 2%);
   --editor-link-color: color-mix(
-    in oklch,
+    in srgb,
     var(--primary) 70%,
     var(--foreground) 30%
   );
   --editor-link-hover-color: color-mix(
-    in oklch,
+    in srgb,
     var(--primary) 82%,
     var(--foreground) 18%
   );
-  --editor-hr-color: color-mix(in oklch, var(--border) 65%, transparent 35%);
+  --editor-hr-color: color-mix(in srgb, var(--border) 65%, transparent 35%);
   --editor-blockquote-bg: color-mix(
-    in oklch,
+    in srgb,
     var(--accent) 35%,
     transparent 65%
   );
   --editor-blockquote-border: color-mix(
-    in oklch,
+    in srgb,
     var(--primary) 45%,
     var(--accent) 55%
   );
-  --editor-code-bg: color-mix(in oklch, var(--accent) 30%, transparent 70%);
+  --editor-code-bg: color-mix(in srgb, var(--accent) 30%, transparent 70%);
   --editor-code-border: color-mix(
-    in oklch,
+    in srgb,
     var(--primary) 35%,
     transparent 65%
   );
   --editor-code-color: color-mix(
-    in oklch,
+    in srgb,
     var(--primary) 70%,
     var(--foreground) 30%
   );
-  --editor-pre-bg: color-mix(in oklch, var(--background) 82%, white 18%);
-  --editor-pre-border: color-mix(in oklch, var(--primary) 32%, transparent 68%);
-  --editor-image-shadow: 0 18px 60px -42px color-mix(in oklch, black 75%, transparent
+  --editor-pre-bg: color-mix(in srgb, var(--background) 82%, white 18%);
+  --editor-pre-border: color-mix(in srgb, var(--primary) 32%, transparent 68%);
+  --editor-image-shadow: 0 18px 60px -42px color-mix(in srgb, black 75%, transparent
         25%);
   --editor-list-marker: color-mix(
-    in oklch,
+    in srgb,
     var(--primary) 70%,
     var(--foreground) 30%
   );
   --editor-table-header-bg: color-mix(
-    in oklch,
+    in srgb,
     var(--accent) 28%,
     transparent 72%
   );
   --editor-table-cell-border: color-mix(
-    in oklch,
+    in srgb,
     var(--border) 60%,
     transparent 40%
   );
   --editor-selection-bg: color-mix(
-    in oklch,
+    in srgb,
     var(--primary) 35%,
     transparent 65%
   );
   --editor-selection-color: color-mix(
-    in oklch,
+    in srgb,
     var(--primary-foreground) 85%,
     var(--foreground) 15%
   );
-  --editor-tag-bg: color-mix(in oklch, var(--accent) 28%, transparent 72%);
+  --editor-tag-bg: color-mix(in srgb, var(--accent) 28%, transparent 72%);
   --editor-tag-color: color-mix(
-    in oklch,
+    in srgb,
     var(--accent-foreground) 85%,
     var(--foreground) 15%
   );
-  --editor-followup-bg: color-mix(in oklch, var(--card) 76%, white 24%);
-  --editor-followup-border: color-mix(in oklch, var(--border) 58%, transparent 42%);
+  --editor-followup-bg: color-mix(in srgb, var(--card) 76%, white 24%);
+  --editor-followup-border: color-mix(in srgb, var(--border) 58%, transparent 42%);
   --editor-icon-button-bg: color-mix(
-    in oklch,
+    in srgb,
     var(--background) 70%,
     white 30%
   );
   --editor-icon-button-border: color-mix(
-    in oklch,
+    in srgb,
     var(--border) 70%,
     transparent 30%
   );
   --editor-icon-button-hover-bg: color-mix(
-    in oklch,
+    in srgb,
     var(--accent) 38%,
     transparent 62%
   );
   --editor-icon-button-hover-border: color-mix(
-    in oklch,
+    in srgb,
     var(--primary) 38%,
     transparent 62%
   );
   --editor-author-divider: color-mix(
-    in oklch,
+    in srgb,
     var(--border) 60%,
     transparent 40%
   );
@@ -628,7 +628,7 @@
     color: var(--editor-link-color);
     text-decoration: underline;
     text-decoration-color: color-mix(
-      in oklch,
+      in srgb,
       var(--editor-link-color) 40%,
       transparent 60%
     );
@@ -797,9 +797,9 @@
     inset: 0;
     background: linear-gradient(
       180deg,
-      rgba(15, 23, 42, 0.05) 0%,
-      rgba(15, 23, 42, 0.75) 75%,
-      rgba(15, 23, 42, 0.96) 100%
+      color-mix(in srgb, var(--foreground) 5%, transparent 95%) 0%,
+      color-mix(in srgb, var(--foreground) 75%, transparent 25%) 75%,
+      color-mix(in srgb, var(--foreground) 96%, transparent 4%) 100%
     );
   }
 
@@ -995,7 +995,7 @@
     padding: clamp(1.25rem, 3vw, 1.75rem);
     border-radius: 1.25rem;
     background: var(--editor-content-bg);
-    border: 1px solid color-mix(in oklch, var(--editor-border-subtle) 80%, transparent 20%);
+    border: 1px solid color-mix(in srgb, var(--editor-border-subtle) 80%, transparent 20%);
   }
 
   .comment-form__row {
@@ -1010,8 +1010,8 @@
     gap: 1rem;
     padding: 0.75rem 1rem;
     border-radius: 0.85rem;
-    background: color-mix(in oklch, var(--primary) 12%, transparent 88%);
-    border: 1px solid color-mix(in oklch, var(--primary) 20%, transparent 80%);
+    background: color-mix(in srgb, var(--primary) 12%, transparent 88%);
+    border: 1px solid color-mix(in srgb, var(--primary) 20%, transparent 80%);
     color: var(--editor-heading-color);
   }
 
@@ -1047,7 +1047,7 @@
 
   .comment-card {
     border-radius: 1.25rem;
-    border: 1px solid color-mix(in oklch, var(--editor-border-subtle) 75%, transparent 25%);
+    border: 1px solid color-mix(in srgb, var(--editor-border-subtle) 75%, transparent 25%);
     background: var(--editor-content-bg);
     padding: clamp(1.25rem, 3vw, 1.75rem);
     display: grid;
@@ -1056,7 +1056,7 @@
 
   .comment-card--admin {
     border-left: 4px solid var(--primary);
-    background: color-mix(in oklch, var(--primary) 12%, var(--editor-content-bg) 88%);
+    background: color-mix(in srgb, var(--primary) 12%, var(--editor-content-bg) 88%);
   }
 
   .comment-card__header {
@@ -1092,7 +1092,7 @@
     font-size: 0.7rem;
     padding: 0.3rem 0.5rem;
     border-radius: 999px;
-    background: color-mix(in oklch, var(--primary) 20%, transparent 80%);
+    background: color-mix(in srgb, var(--primary) 20%, transparent 80%);
     color: var(--primary);
     text-transform: uppercase;
     letter-spacing: 0.14em;
@@ -1130,17 +1130,17 @@
     display: grid;
     gap: 0.85rem;
     padding-left: clamp(1rem, 3vw, 1.5rem);
-    border-left: 2px solid color-mix(in oklch, var(--primary) 20%, transparent 80%);
+    border-left: 2px solid color-mix(in srgb, var(--primary) 20%, transparent 80%);
   }
 
   .comment-reply {
     border-radius: 1rem;
     padding: 0.85rem 1rem;
-    background: color-mix(in oklch, var(--editor-content-bg) 90%, transparent 10%);
+    background: color-mix(in srgb, var(--editor-content-bg) 90%, transparent 10%);
   }
 
   .comment-reply--admin {
-    background: color-mix(in oklch, var(--primary) 16%, var(--editor-content-bg) 84%);
+    background: color-mix(in srgb, var(--primary) 16%, var(--editor-content-bg) 84%);
     border-left: 3px solid var(--primary);
   }
 
@@ -1165,7 +1165,7 @@
     letter-spacing: 0.12em;
     padding: 0.2rem 0.45rem;
     border-radius: 999px;
-    background: color-mix(in oklch, var(--primary) 18%, transparent 82%);
+    background: color-mix(in srgb, var(--primary) 18%, transparent 82%);
     color: var(--primary);
   }
 
@@ -1186,7 +1186,7 @@
   .comment-reply__children {
     margin-top: 0.75rem;
     padding-left: clamp(0.75rem, 2vw, 1.25rem);
-    border-left: 2px solid color-mix(in oklch, var(--primary) 18%, transparent 82%);
+    border-left: 2px solid color-mix(in srgb, var(--primary) 18%, transparent 82%);
     display: grid;
     gap: 0.75rem;
   }
@@ -1206,9 +1206,9 @@
 
   .comment-skeleton {
     border-radius: 1.25rem;
-    border: 1px solid color-mix(in oklch, var(--editor-border-subtle) 75%, transparent 25%);
+    border: 1px solid color-mix(in srgb, var(--editor-border-subtle) 75%, transparent 25%);
     padding: 1.25rem;
-    background: color-mix(in oklch, var(--editor-content-bg) 90%, transparent 10%);
+    background: color-mix(in srgb, var(--editor-content-bg) 90%, transparent 10%);
     display: grid;
     gap: 0.75rem;
   }
@@ -1217,7 +1217,7 @@
     height: 0.75rem;
     width: 40%;
     border-radius: 999px;
-    background: color-mix(in oklch, var(--editor-border-subtle) 30%, transparent 70%);
+    background: color-mix(in srgb, var(--editor-border-subtle) 30%, transparent 70%);
     animation: pulse 1.4s ease-in-out infinite;
   }
 
@@ -1233,7 +1233,7 @@
   .comment-skeleton__body {
     height: 2.2rem;
     border-radius: 0.75rem;
-    background: color-mix(in oklch, var(--editor-border-subtle) 30%, transparent 70%);
+    background: color-mix(in srgb, var(--editor-border-subtle) 30%, transparent 70%);
     animation: pulse 1.4s ease-in-out infinite;
   }
 

@@ -106,10 +106,23 @@ async function withPrismaFallback<T>(
     return await operation();
   } catch (error) {
     if (shouldFallbackToSupabase(error) && hasSupabaseCredentials) {
-      console.warn(
-        "[supabase-api] Falling back to Supabase client due to Prisma error:",
-        error
-      );
+      // Only log connection errors in development, and make them less verbose
+      if (process.env.NODE_ENV === "development") {
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        const errorCode = error instanceof PrismaClientKnownRequestError ? error.code : undefined;
+
+        // Suppress verbose connection error logs - fallback is working as expected
+        if (errorCode === "P1001" || /can't reach database server/i.test(errorMessage)) {
+          console.debug(
+            `[supabase-api] Prisma connection unavailable (${errorCode || "connection error"}), using Supabase fallback`
+          );
+        } else {
+          console.warn(
+            "[supabase-api] Falling back to Supabase client due to Prisma error:",
+            error
+          );
+        }
+      }
       return fallback();
     }
     throw error;

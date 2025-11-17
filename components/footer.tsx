@@ -1,7 +1,9 @@
 "use client"
 
-import Link from "next/link"
 import { useTranslations } from "@/lib/i18n/use-translations"
+import logo from '@/public/logo.png'
+import Image from "next/image"
+import Link from "next/link"
 
 export function Footer() {
   const { t } = useTranslations("common")
@@ -13,8 +15,8 @@ export function Footer() {
       <div className="container py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="col-span-1">
-            <h3 className="font-bold text-lg mb-3">{brandName}</h3>
-            <p className="text-sm text-muted-foreground">{t("footer.madeWith")}</p>
+            <Image src={logo} alt={brandName} width={64} height={64} />
+            <p className="text-sm text-muted-foreground mt-2">{t("footer.madeWith")}</p>
           </div>
 
           <div>

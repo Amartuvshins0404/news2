@@ -84,7 +84,7 @@ async function PostPageContent({ slug }: { slug: string }) {
               variant="ghost"
               size="sm"
               asChild
-              className="mb-8 rounded-full border border-slate-700/80 bg-slate-900/70 text-slate-200 transition-colors hover:border-slate-500 hover:bg-slate-800/80 hover:text-white"
+              className="mb-8 rounded-full border border-border bg-muted/70 text-muted-foreground transition-colors hover:border-primary/50 hover:bg-muted hover:text-foreground"
             >
               <Link href="/" className="flex items-center gap-2">
                 <ArrowLeft className="h-4 w-4" />
@@ -140,7 +140,7 @@ async function PostPageContent({ slug }: { slug: string }) {
                       alt={post.author.name}
                       width={64}
                       height={64}
-                      className="rounded-full border border-slate-800 object-cover"
+                      className="rounded-full border border-border object-cover"
                     />
                     <div>
                       <div className="editorial-author-name">{post.author.name}</div>

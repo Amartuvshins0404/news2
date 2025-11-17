@@ -178,39 +178,40 @@ export function RichTextEditorField({ value, onChange, placeholder }: RichTextEd
   }
 
   const theme = useMemo(() => {
-    const palettePrimary = resolveCssVar("--primary", isDarkMode ? "#93c5fd" : "#2563eb")
-    const paletteSecondary = resolveCssVar("--secondary", isDarkMode ? "#c4b5fd" : "#4f46e5")
+    // Use theme colors from CSS variables with proper fallbacks matching the design system
+    const palettePrimary = resolveCssVar("--primary", isDarkMode ? "rgb(248, 113, 101)" : "rgb(226, 59, 47)")
+    const paletteSecondary = resolveCssVar("--secondary", isDarkMode ? "rgb(45, 48, 52)" : "rgb(245, 246, 247)")
     const divider = resolveCssVar(
       "--editor-border-subtle",
-      isDarkMode ? "rgba(148, 163, 184, 0.24)" : "rgba(15, 23, 42, 0.08)",
+      isDarkMode ? "rgba(55, 58, 62, 0.5)" : "rgba(229, 231, 235, 0.8)",
       "borderColor"
     )
-    const paper = resolveCssVar("--card", isDarkMode ? "#111827" : "#ffffff", "backgroundColor")
+    const paper = resolveCssVar("--card", isDarkMode ? "rgb(35, 38, 42)" : "rgb(255, 255, 255)", "backgroundColor")
     const backgroundDefault = resolveCssVar(
       "--background",
-      isDarkMode ? "#0b1120" : "#f8fafc",
+      isDarkMode ? "rgb(27, 30, 34)" : "rgb(255, 255, 255)",
       "backgroundColor"
     )
-    const textPrimary = resolveCssVar("--foreground", isDarkMode ? "#e2e8f0" : "#0f172a")
+    const textPrimary = resolveCssVar("--foreground", isDarkMode ? "rgb(245, 246, 247)" : "rgb(22, 61, 99)")
     const textSecondary = resolveCssVar(
       "--muted-foreground",
-      isDarkMode ? "#cbd5f5" : "#475569"
+      isDarkMode ? "rgb(156, 163, 175)" : "rgb(107, 114, 128)"
     )
     const toolbarSelectedBg = resolveCssVar(
       "--editor-toolbar-button-hover-bg",
-      isDarkMode ? "rgba(148, 163, 184, 0.16)" : "rgba(37, 99, 235, 0.1)",
+      isDarkMode ? "rgba(96, 165, 250, 0.16)" : "rgba(22, 61, 99, 0.1)",
       "backgroundColor"
     )
     const toolbarSelectedHoverBg = resolveCssVar(
       "--editor-toolbar-button-hover-bg",
-      isDarkMode ? "rgba(148, 163, 184, 0.22)" : "rgba(37, 99, 235, 0.16)",
+      isDarkMode ? "rgba(96, 165, 250, 0.22)" : "rgba(22, 61, 99, 0.16)",
       "backgroundColor"
     )
     const shadow = resolveCssValue(
       "--editor-shadow",
       isDarkMode
-        ? "0 18px 48px -28px rgba(3, 7, 18, 0.7)"
-        : "0 22px 48px -28px rgba(15, 23, 42, 0.18)"
+        ? "0 18px 48px -28px rgba(0, 0, 0, 0.7)"
+        : "0 22px 48px -28px rgba(22, 61, 99, 0.18)"
     )
 
     // Ensure all colors are converted to MUI-supported formats
@@ -342,7 +343,14 @@ export function RichTextEditorField({ value, onChange, placeholder }: RichTextEd
               <MenuButtonStrikethrough tooltipLabel={t("postEditor.editor.controls.strike")} />
               <MenuButtonTextColor
                 tooltipLabel={t("postEditor.editor.controls.textColor")}
-                swatchColors={["#111827", "#991b1b", "#0369a1", "#f59e0b", "#16a34a", "#9333ea"]}
+                swatchColors={[
+                  resolveCssVar("--foreground", isDarkMode ? "rgb(245, 246, 247)" : "rgb(22, 61, 99)"),
+                  resolveCssVar("--destructive", isDarkMode ? "rgb(248, 113, 101)" : "rgb(226, 59, 47)"),
+                  resolveCssVar("--primary", isDarkMode ? "rgb(248, 113, 101)" : "rgb(226, 59, 47)"),
+                  "rgb(245, 158, 11)", // Orange accent
+                  "rgb(22, 163, 74)", // Green accent
+                  "rgb(147, 51, 234)", // Purple accent
+                ]}
               />
               <MenuDivider />
               <MenuButtonBulletedList tooltipLabel={t("postEditor.editor.controls.bulletList")} />

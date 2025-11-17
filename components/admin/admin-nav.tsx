@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { usePathname } from "next/navigation"
 import {
   LayoutDashboard,
@@ -68,10 +69,15 @@ export function AdminNav({ onDashboardToggle }: AdminNavProps) {
   return (
     <aside className="w-64 border-r bg-muted/40 min-h-screen flex flex-col">
       <div className="p-6 border-b">
-        <Link href="/admin/dashboard" className="flex items-center gap-2 font-bold text-xl">
-          <span className="bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
-            {tCommon("brand.name")}
-          </span>
+        <Link href="/admin/dashboard" className="flex items-center">
+          <Image
+            src="/logo.png"
+            alt={tCommon("brand.name")}
+            width={32}
+            height={32}
+            className="h-8 w-8 object-contain"
+            priority
+          />
         </Link>
         <p className="text-sm text-muted-foreground mt-1">{t("nav.tagline")}</p>
       </div>

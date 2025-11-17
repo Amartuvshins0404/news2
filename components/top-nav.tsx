@@ -1,13 +1,14 @@
 "use client"
 
-import Link from "next/link"
-import { Menu, Moon, Sun, Globe } from "lucide-react"
-import type { LucideIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { useTheme } from "@/lib/theme-provider"
+import { localeNames, locales } from "@/lib/i18n/config"
 import { useTranslations } from "@/lib/i18n/use-translations"
-import { locales, localeNames } from "@/lib/i18n/config"
+import { useTheme } from "@/lib/theme-provider"
+import type { LucideIcon } from "lucide-react"
+import { Globe, Menu, Moon, Sun } from "lucide-react"
+import Image from "next/image"
+import Link from "next/link"
 import { useState } from "react"
 
 export function TopNav() {
@@ -29,11 +30,18 @@ export function TopNav() {
   ]
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
       <nav className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-6">
-          <Link href="/" className="flex items-center gap-2 font-bold text-xl">
-            <span className="bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">AuroraNews</span>
+          <Link href="/" className="flex items-center">
+            <Image
+              src="/logo.png"
+              alt="Vo!ces"
+              width={32}
+              height={32}
+              className="h-8 w-8 object-contain"
+              priority
+            />
           </Link>
 
           <div className="hidden md:flex items-center gap-6">

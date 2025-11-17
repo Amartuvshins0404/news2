@@ -19,7 +19,7 @@ export function generateSEOMetadata({
   publishedTime,
   author,
 }: SEOProps): Metadata {
-  const siteName = "AuroraNews"
+  const siteName = "Vo!ces"
   const fullTitle = `${title} | ${siteName}`
   const fullUrl = url || process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
   const ogImage = image || "/placeholder.svg?height=630&width=1200"
@@ -68,10 +68,10 @@ export function generateArticleSchema({ title, description, image, author, publi
     },
     publisher: {
       "@type": "Organization",
-      name: "AuroraNews",
+      name: "Vo!ces",
       logo: {
         "@type": "ImageObject",
-        url: `${process.env.NEXT_PUBLIC_SITE_URL}/icon.svg`,
+        url: `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/logo.png`,
       },
     },
     datePublished: publishedTime,
