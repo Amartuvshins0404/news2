@@ -126,10 +126,10 @@ async function withPrismaFallback<T>(
             }), using Supabase fallback`
           );
         } else {
-      console.warn(
-        "[supabase-api] Falling back to Supabase client due to Prisma error:",
-        error
-      );
+          console.warn(
+            "[supabase-api] Falling back to Supabase client due to Prisma error:",
+            error
+          );
         }
       }
       return fallback();
@@ -165,12 +165,22 @@ function handleSupabaseTableError(error: unknown, table: string): never {
   }
   // Try to extract meaningful error information from Supabase error objects
   if (error && typeof error === "object") {
-    const err = error as { code?: string; message?: string; details?: string; hint?: string };
-    const errorMessage = err.message || err.details || err.hint || "Unknown error";
+    const err = error as {
+      code?: string;
+      message?: string;
+      details?: string;
+      hint?: string;
+    };
+    const errorMessage =
+      err.message || err.details || err.hint || "Unknown error";
     const errorCode = err.code ? ` (${err.code})` : "";
-    throw new Error(`Supabase error for table '${table}': ${errorMessage}${errorCode}`);
+    throw new Error(
+      `Supabase error for table '${table}': ${errorMessage}${errorCode}`
+    );
   }
-  throw new Error(`Unexpected Supabase error for table '${table}': ${String(error)}`);
+  throw new Error(
+    `Unexpected Supabase error for table '${table}': ${String(error)}`
+  );
 }
 
 function isSupabaseUniqueConstraintError(
@@ -606,24 +616,24 @@ export async function updatePost(
       try {
         const updatedPost = await prisma.$transaction(async (tx) => {
           const updateData: any = {
-              title: updates.title?.trim(),
-              slug: normalizedSlug ?? updates.slug ?? undefined,
-              excerpt: updates.excerpt,
-              body_html: updates.body_html,
-              featured_image: updates.featured_image,
-              category_id: updates.category?.id,
-              status: updates.status,
-              published_at: updates.published_at
-                ? new Date(updates.published_at)
-                : undefined,
-              scheduled_at:
-                updates.scheduled_at === undefined
-                  ? undefined
-                  : updates.scheduled_at
-                  ? new Date(updates.scheduled_at)
-                  : null,
-              is_featured: updates.is_featured ?? undefined,
-              read_time: updates.read_time ?? undefined,
+            title: updates.title?.trim(),
+            slug: normalizedSlug ?? updates.slug ?? undefined,
+            excerpt: updates.excerpt,
+            body_html: updates.body_html,
+            featured_image: updates.featured_image,
+            category_id: updates.category?.id,
+            status: updates.status,
+            published_at: updates.published_at
+              ? new Date(updates.published_at)
+              : undefined,
+            scheduled_at:
+              updates.scheduled_at === undefined
+                ? undefined
+                : updates.scheduled_at
+                ? new Date(updates.scheduled_at)
+                : null,
+            is_featured: updates.is_featured ?? undefined,
+            read_time: updates.read_time ?? undefined,
           };
           if (updates.page_type !== undefined) {
             updateData.page_type = updates.page_type;
@@ -1622,9 +1632,19 @@ async function legacyCreatePost(
   post: Partial<Post> & { author_id?: string }
 ): Promise<Post> {
   const client = await createServerClient();
+  // Generate UUID and timestamps if database doesn't have defaults (fallback)
+  let postId: string;
+  if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
+    postId = crypto.randomUUID();
+  } else {
+    const { randomUUID } = await import("node:crypto");
+    postId = randomUUID();
+  }
+  const now = new Date().toISOString();
   const { data, error } = await client
     .from("posts")
     .insert({
+      id: postId,
       title: post.title,
       slug: post.slug,
       excerpt: post.excerpt,
@@ -1637,6 +1657,9 @@ async function legacyCreatePost(
       scheduled_at: post.scheduled_at,
       is_featured: post.is_featured || false,
       read_time: post.read_time || 5,
+      page_type: post.page_type || "explore",
+      created_at: now,
+      updated_at: now,
     })
     .select()
     .single();
@@ -1661,10 +1684,22 @@ async function legacyCreatePost(
     }
   }
 
+  // Generate UUID and timestamps for analytics if database doesn't have defaults (fallback)
+  let analyticsId: string;
+  if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
+    analyticsId = crypto.randomUUID();
+  } else {
+    const { randomUUID } = await import("node:crypto");
+    analyticsId = randomUUID();
+  }
+  const analyticsNow = new Date().toISOString();
   const { error: analyticsError } = await client.from("analytics").insert({
+    id: analyticsId,
     post_id: (data as any).id,
     views_count: 0,
     unique_visitors: 0,
+    created_at: analyticsNow,
+    updated_at: analyticsNow,
   });
   if (analyticsError) {
     handleSupabaseTableError(analyticsError, "analytics");
@@ -1748,10 +1783,14 @@ async function legacyGetCategories(): Promise<Category[]> {
   // This handles cases where the database might have corrupted data or the query
   // is returning invalid rows
   const allRows = (data as any[]) || [];
-  const validRows = allRows.filter((row) => row && row.id != null && row.id !== "");
+  const validRows = allRows.filter(
+    (row) => row && row.id != null && row.id !== ""
+  );
   if (validRows.length !== allRows.length) {
     console.warn(
-      `[supabase-api] Filtered out ${allRows.length - validRows.length} category row(s) with missing or invalid IDs`
+      `[supabase-api] Filtered out ${
+        allRows.length - validRows.length
+      } category row(s) with missing or invalid IDs`
     );
   }
   return validRows.map(mapSupabaseCategory);
@@ -1763,12 +1802,55 @@ async function legacyCreateCategory(cat: {
   description?: string;
 }): Promise<Category> {
   const client = await createServerClient();
+  // Generate UUID and timestamps if database doesn't have defaults (fallback for production)
+  // The proper fix is to add DEFAULT values to the database schema via migration
+  // Using crypto.randomUUID() which is available in Node.js 14.17.0+ and Web Crypto API
+  let categoryId: string;
+  if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
+    categoryId = crypto.randomUUID();
+  } else {
+    // Fallback for older environments
+    const { randomUUID } = await import("node:crypto");
+    categoryId = randomUUID();
+  }
+  // Ensure timestamps are always set - PostgreSQL/Supabase expects ISO 8601 format
+  const now = new Date().toISOString();
+  const categoryData: Record<string, unknown> = {
+    name: cat.name,
+    slug: cat.slug,
+    id: categoryId, // Generate UUID client-side as fallback
+    created_at: now, // Set timestamp as fallback - REQUIRED
+    updated_at: now, // Set timestamp as fallback - REQUIRED
+  };
+  // Only add description if provided
+  if (cat.description !== undefined) {
+    categoryData.description = cat.description;
+  }
+
+  // Log in development to debug
+  if (process.env.NODE_ENV === "development") {
+    console.log("[legacyCreateCategory] Inserting category with data:", {
+      ...categoryData,
+      created_at: categoryData.created_at,
+      updated_at: categoryData.updated_at,
+    });
+  }
+
   const { data, error } = await client
     .from("categories")
-    .insert(cat)
+    .insert(categoryData)
     .select()
     .single();
   if (error) {
+    // Enhanced error logging
+    console.error("[legacyCreateCategory] Supabase insert error:", {
+      error,
+      categoryData: {
+        ...categoryData,
+        created_at: categoryData.created_at,
+        updated_at: categoryData.updated_at,
+      },
+    });
     handleSupabaseTableError(error, "categories");
   }
   return mapSupabaseCategory(data);
@@ -1822,9 +1904,24 @@ async function legacyCreateAttribute(
   attr: Omit<Attribute, "id">
 ): Promise<Attribute> {
   const client = await createServerClient();
+  // Generate UUID and timestamps if database doesn't have defaults (fallback)
+  let attributeId: string;
+  if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
+    attributeId = crypto.randomUUID();
+  } else {
+    const { randomUUID } = await import("node:crypto");
+    attributeId = randomUUID();
+  }
+  const now = new Date().toISOString();
+  const attributeData = {
+    ...attr,
+    id: attributeId,
+    created_at: now,
+    updated_at: now,
+  };
   const { data, error } = await client
     .from("attributes")
-    .insert(attr)
+    .insert(attributeData)
     .select()
     .single();
   if (error) {
@@ -1931,6 +2028,9 @@ async function legacyCreateAuthor(
   input: AuthorInput & { id: string }
 ): Promise<Author> {
   const client = await createServerClient();
+  // Add timestamps if database doesn't have defaults (fallback)
+  // ID is already provided in input
+  const now = new Date().toISOString();
   const { data, error } = await client
     .from("authors")
     .insert({
@@ -1940,6 +2040,8 @@ async function legacyCreateAuthor(
       role: input.role,
       bio: input.bio ?? null,
       avatar: input.avatar ?? null,
+      created_at: now,
+      updated_at: now,
     })
     .select("*")
     .single();
@@ -2113,26 +2215,35 @@ async function legacyCreateComment(input: {
   isAdmin?: boolean;
 }): Promise<Comment> {
   const client = await createServerClient();
+  // Generate UUID and timestamps if database doesn't have defaults (fallback)
+  let commentId: string;
+  if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
+    commentId = crypto.randomUUID();
+  } else {
+    const { randomUUID } = await import("node:crypto");
+    commentId = randomUUID();
+  }
+  const now = new Date().toISOString();
+  // Simplified select - don't fetch replies when creating (they don't exist yet)
+  // This avoids the PGRST200 relationship error in production
   const { data, error } = await client
     .from("comments")
     .insert({
+      id: commentId,
       post_id: input.postId,
       parent_id: input.parentId ?? null,
       author_name: input.authorName,
       body: input.body,
       is_admin: input.isAdmin ?? false,
       admin_id: input.adminId ?? null,
+      created_at: now,
+      updated_at: now,
     })
     .select(
       `
         id, post_id, parent_id, author_name, body, is_admin, admin_id, created_at, updated_at,
         admin:authors(id, slug, name, bio, avatar, role, social_links),
-        post:posts(id, slug, title),
-        replies:comments!comments_parent_id_fkey(
-          id, post_id, parent_id, author_name, body, is_admin, admin_id, created_at, updated_at,
-          admin:authors(id, slug, name, bio, avatar, role, social_links),
-          post:posts(id, slug, title)
-        )
+        post:posts(id, slug, title)
       `
     )
     .single();
