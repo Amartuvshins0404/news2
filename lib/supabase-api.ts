@@ -1367,10 +1367,13 @@ function mapSupabaseAuthor(row: any): Author {
 }
 
 function mapSupabaseCategory(row: any): Category {
+  if (!row || !row.id) {
+    throw new Error("Invalid category data: missing required 'id' field");
+  }
   return {
     id: row.id,
-    slug: row.slug,
-    name: row.name,
+    slug: row.slug || "uncategorized",
+    name: row.name || "Uncategorized",
     description: row.description ?? undefined,
     attributes: undefined,
     post_count: row.post_count ?? 0,
@@ -1741,7 +1744,17 @@ async function legacyGetCategories(): Promise<Category[]> {
   if (error) {
     handleSupabaseTableError(error, "categories");
   }
-  return ((data as any[]) || []).map(mapSupabaseCategory);
+  // Filter out any rows with null or missing IDs to avoid constraint violations
+  // This handles cases where the database might have corrupted data or the query
+  // is returning invalid rows
+  const allRows = (data as any[]) || [];
+  const validRows = allRows.filter((row) => row && row.id != null && row.id !== "");
+  if (validRows.length !== allRows.length) {
+    console.warn(
+      `[supabase-api] Filtered out ${allRows.length - validRows.length} category row(s) with missing or invalid IDs`
+    );
+  }
+  return validRows.map(mapSupabaseCategory);
 }
 
 async function legacyCreateCategory(cat: {
