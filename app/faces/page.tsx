@@ -5,7 +5,6 @@ import { useSearchParams, useRouter } from "next/navigation"
 import { TopNav } from "@/components/top-nav"
 import { Footer } from "@/components/footer"
 import { ArticleCard } from "@/components/article-card"
-import { ExploreFilters } from "@/components/explore-filters"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -105,148 +104,9 @@ function FacesPageContent() {
       <TopNav />
 
       <main className="flex-1">
-        <section className="relative py-16 md:py-24 bg-gradient-to-b from-primary/5 via-background to-background overflow-hidden">
-          {/* Decorative background element */}
-          <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl -z-10" />
-
-          <div className="container max-w-5xl mx-auto px-4 relative z-10">
-            <div className="space-y-8">
-              {/* Hero Text */}
-              <div className="space-y-4">
-                <div className="flex items-center gap-2 w-fit">
-                  <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
-                  <span className="text-sm font-semibold text-primary uppercase tracking-widest">
-                    {t("faces.discover")}
-                  </span>
-                </div>
-                <h1 className="text-5xl md:text-6xl font-bold text-balance leading-tight text-foreground">
-                  {t("faces.premiumNews")}{" "}
-                  <span className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-                    {t("faces.insights")}
-                  </span>
-                </h1>
-                <p className="text-lg text-muted-foreground max-w-2xl leading-relaxed">{t("faces.description")}</p>
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-3 pt-4">
-                <div className="relative flex-1 group">
-                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground group-focus-within:text-primary transition-colors pointer-events-none" />
-                  <Input
-                    type="search"
-                    placeholder={t("faces.searchPlaceholder")}
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-                    className="pl-12 h-12 text-base bg-background border border-primary/20 focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all"
-                  />
-                </div>
-                <Button
-                  onClick={handleSearch}
-                  size="lg"
-                  disabled={loading}
-                  className="h-12 px-8 font-semibold shadow-lg hover:shadow-xl transition-all"
-                >
-                  {loading ? (
-                    <Loader2 className="h-5 w-5 animate-spin" />
-                  ) : (
-                    <>
-                      <Zap className="h-5 w-5 mr-2" />
-                      {t("faces.search")}
-                    </>
-                  )}
-                </Button>
-              </div>
-
-              {hasActiveFilters && (
-                <div className="flex flex-wrap gap-2 items-center pt-4 border-t border-border/50">
-                  <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">
-                    {t("faces.filters")}:
-                  </span>
-                  <div className="flex flex-wrap gap-2">
-                    {searchQuery && (
-                      <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-3 py-1.5 rounded-full text-sm font-medium hover:bg-primary/15 transition-all">
-                        <span>"{searchQuery}"</span>
-                        <button onClick={() => setSearchQuery("")} className="hover:opacity-70 transition-opacity ml-1">
-                          <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M6 18L18 6M6 6l12 12"
-                            />
-                          </svg>
-                        </button>
-                      </div>
-                    )}
-                    {selectedCategory !== "all" && (
-                      <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-3 py-1.5 rounded-full text-sm font-medium hover:bg-primary/15 transition-all">
-                        <span>{categories.find((c) => c.slug === selectedCategory)?.name}</span>
-                        <button
-                          onClick={() => setSelectedCategory("all")}
-                          className="hover:opacity-70 transition-opacity ml-1"
-                        >
-                          <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M6 18L18 6M6 6l12 12"
-                            />
-                          </svg>
-                        </button>
-                      </div>
-                    )}
-                    {selectedTags.map((tagSlug) => (
-                      <div
-                        key={tagSlug}
-                        className="inline-flex items-center gap-2 bg-primary/10 text-primary px-3 py-1.5 rounded-full text-sm font-medium hover:bg-primary/15 transition-all"
-                      >
-                        <span>{tags.find((t) => t.slug === tagSlug)?.name}</span>
-                        <button
-                          onClick={() => setSelectedTags(selectedTags.filter((t) => t !== tagSlug))}
-                          className="hover:opacity-70 transition-opacity ml-1"
-                        >
-                          <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M6 18L18 6M6 6l12 12"
-                            />
-                          </svg>
-                        </button>
-                      </div>
-                    ))}
-                    <Button variant="ghost" size="sm" onClick={handleClearFilters} className="text-xs font-semibold">
-                      {t("faces.clearAll")}
-                    </Button>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        </section>
-
-        <ExploreFilters
-          categories={categories}
-          tags={tags}
-          selectedCategory={selectedCategory}
-          selectedTags={selectedTags}
-          dateFrom={dateFrom}
-          dateTo={dateTo}
-          sortBy={sortBy}
-          onCategoryChange={setSelectedCategory}
-          onTagsChange={setSelectedTags}
-          onDateFromChange={setDateFrom}
-          onDateToChange={setDateTo}
-          onSortChange={setSortBy}
-          onApply={handleSearch}
-          onReset={handleClearFilters}
-        />
-
         {/* Results Section */}
-        <section className="py-16">
-          <div className="container max-w-5xl mx-auto px-4">
+        <section className="py-8">
+          <div className="container max-w-7xl mx-auto px-4">
             {loading ? (
               <div className="flex flex-col items-center justify-center py-20 gap-4">
                 <Loader2 className="h-8 w-8 animate-spin text-primary" />

@@ -9,11 +9,13 @@ import type { LucideIcon } from "lucide-react"
 import { Globe, Menu, Moon, Sun } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { useState } from "react"
 
 export function TopNav() {
   const { theme, setTheme } = useTheme()
   const { t, locale, changeLocale } = useTranslations("common")
+  const pathname = usePathname()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   type NavLink = {
@@ -23,17 +25,15 @@ export function TopNav() {
   }
 
   const navLinks: NavLink[] = [
-    { href: "/", label: t("nav.home") },
-    { href: "/explore", label: t("nav.explore") },
-    { href: "/about", label: t("nav.about") },
-    { href: "/contact", label: t("nav.contact") },
+    { href: "/explore", label: "Voices" },
+    { href: "/faces", label: "Faces" },
   ]
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
       <nav className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-6">
-          <Link href="/" className="flex items-center">
+          <Link href="/explore" className="flex items-center">
             <Image
               src="/logo.png"
               alt="Vo!ces"
@@ -45,16 +45,21 @@ export function TopNav() {
           </Link>
 
           <div className="hidden md:flex items-center gap-6">
-            {navLinks.map((link) => (
+            {navLinks.map((link) => {
+              const isActive = pathname === link.href || (link.href === "/explore" && pathname === "/")
+              return (
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1.5"
+                  className={`text-sm font-medium transition-colors flex items-center gap-1.5 ${
+                    isActive ? "text-foreground font-semibold" : "text-muted-foreground hover:text-foreground"
+                  }`}
               >
                 {link.icon && <link.icon className="h-4 w-4" />}
                 {link.label}
               </Link>
-            ))}
+              )
+            })}
           </div>
         </div>
 

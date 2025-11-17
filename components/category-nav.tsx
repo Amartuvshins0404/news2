@@ -32,11 +32,17 @@ export function CategoryNav() {
   }
 
   return (
-    <div className="border-b bg-muted/20">
-      <div className="container py-3">
+    <div className="border-b bg-background">
+      <div className="container py-4">
         <div className="flex gap-2 overflow-x-auto scrollbar-hide">
           {categories.map((category) => (
-            <Button key={category.id} variant="ghost" size="sm" asChild>
+            <Button
+              key={category.id}
+              variant="outline"
+              size="sm"
+              asChild
+              className="rounded-full border-border/50 bg-muted/30 hover:bg-muted/50 text-foreground whitespace-nowrap"
+            >
               <Link href={`/category/${category.slug}`}>{category.name}</Link>
             </Button>
           ))}

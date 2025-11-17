@@ -44,9 +44,32 @@ export async function POST(request: Request) {
 
     // Security: Always use the authenticated user's author ID to prevent impersonation
     // Ignore any author_id provided in the request body
+    // First, ensure the author record exists for this auth user
+    const { getAuthorById } = await import("@/lib/supabase-api")
+    let authorId = guard.user.id
+
+    try {
+      const author = await getAuthorById(guard.user.id)
+      if (!author) {
+        // Author doesn't exist, use fallback author or create one
+        const { ensureFallbackAuthor } = await import("@/lib/supabase-api")
+        const fallbackAuthor = await ensureFallbackAuthor()
+        if (fallbackAuthor) {
+          authorId = fallbackAuthor.id
+        }
+      }
+    } catch (error) {
+      // If we can't find the author, use fallback
+      const { ensureFallbackAuthor } = await import("@/lib/supabase-api")
+      const fallbackAuthor = await ensureFallbackAuthor()
+      if (fallbackAuthor) {
+        authorId = fallbackAuthor.id
+      }
+    }
+
     const secureBody = {
       ...body,
-      author_id: guard.user.id, // Use authenticated user's ID, not from request body
+      author_id: authorId, // Use authenticated user's ID or fallback, not from request body
     }
 
     const post = await createPost(secureBody)

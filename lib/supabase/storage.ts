@@ -106,6 +106,20 @@ async function uploadWithServiceClient(
   folder?: string
 ): Promise<StoredObjectInfo> {
   const supabase = getServiceRoleClient();
+
+  // Check if bucket exists, if not provide helpful error
+  const { data: buckets, error: listError } = await supabase.storage.listBuckets();
+  if (listError) {
+    throw new Error(`Failed to access storage: ${listError.message}`);
+  }
+
+  const bucketExists = buckets?.some((b) => b.name === BUCKET_NAME);
+  if (!bucketExists) {
+    throw new Error(
+      `Storage bucket "${BUCKET_NAME}" not found. Please create it in your Supabase dashboard under Storage, or set NEXT_PUBLIC_SUPABASE_BUCKET_NAME environment variable to an existing bucket name.`
+    );
+  }
+
   const bucket = supabase.storage.from(BUCKET_NAME);
   const sanitizedName = file.name.replace(/\s+/g, "-");
   const uniqueFileName = generateUniqueObjectName(sanitizedName);

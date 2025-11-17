@@ -126,10 +126,10 @@ async function withPrismaFallback<T>(
             }), using Supabase fallback`
           );
         } else {
-          console.warn(
-            "[supabase-api] Falling back to Supabase client due to Prisma error:",
-            error
-          );
+      console.warn(
+        "[supabase-api] Falling back to Supabase client due to Prisma error:",
+        error
+      );
         }
       }
       return fallback();
@@ -223,7 +223,7 @@ function transformAuthorModel(author: AuthorModel): Author {
 let fallbackAuthor: Author | null = null;
 let fallbackAuthorPromise: Promise<Author | null | undefined> | null = null;
 
-async function ensureFallbackAuthor() {
+export async function ensureFallbackAuthor() {
   if (fallbackAuthor) return fallbackAuthor;
   if (fallbackAuthorPromise) return fallbackAuthorPromise;
 
@@ -599,24 +599,24 @@ export async function updatePost(
       try {
         const updatedPost = await prisma.$transaction(async (tx) => {
           const updateData: any = {
-            title: updates.title?.trim(),
-            slug: normalizedSlug ?? updates.slug ?? undefined,
-            excerpt: updates.excerpt,
-            body_html: updates.body_html,
-            featured_image: updates.featured_image,
-            category_id: updates.category?.id,
-            status: updates.status,
-            published_at: updates.published_at
-              ? new Date(updates.published_at)
-              : undefined,
-            scheduled_at:
-              updates.scheduled_at === undefined
-                ? undefined
-                : updates.scheduled_at
-                ? new Date(updates.scheduled_at)
-                : null,
-            is_featured: updates.is_featured ?? undefined,
-            read_time: updates.read_time ?? undefined,
+              title: updates.title?.trim(),
+              slug: normalizedSlug ?? updates.slug ?? undefined,
+              excerpt: updates.excerpt,
+              body_html: updates.body_html,
+              featured_image: updates.featured_image,
+              category_id: updates.category?.id,
+              status: updates.status,
+              published_at: updates.published_at
+                ? new Date(updates.published_at)
+                : undefined,
+              scheduled_at:
+                updates.scheduled_at === undefined
+                  ? undefined
+                  : updates.scheduled_at
+                  ? new Date(updates.scheduled_at)
+                  : null,
+              is_featured: updates.is_featured ?? undefined,
+              read_time: updates.read_time ?? undefined,
           };
           if (updates.page_type !== undefined) {
             updateData.page_type = updates.page_type;
