@@ -5,12 +5,13 @@ import { useSearchParams, useRouter } from "next/navigation"
 import { TopNav } from "@/components/top-nav"
 import { Footer } from "@/components/footer"
 import { ArticleCard } from "@/components/article-card"
+import { PageHero } from "@/components/page-hero"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { apiClient } from "@/lib/api-client"
 import { useTranslations } from "@/lib/i18n/use-translations"
-import { Search, Loader2, Zap } from "lucide-react"
+import { Search, Loader2 } from "lucide-react"
 import type { Post, Category, Tag } from "@/lib/types"
 
 function FacesPageContent() {
@@ -20,9 +21,11 @@ function FacesPageContent() {
 
   const [searchQuery, setSearchQuery] = useState(searchParams.get("q") || "")
   const [posts, setPosts] = useState<Post[]>([])
+  const [featuredPost, setFeaturedPost] = useState<Post | undefined>(undefined)
   const [categories, setCategories] = useState<Category[]>([])
   const [tags, setTags] = useState<Tag[]>([])
   const [loading, setLoading] = useState(false)
+  const [contentType, setContentType] = useState<"read" | "watch" | "listen">("watch")
 
   // Filter states
   const [selectedCategory, setSelectedCategory] = useState(searchParams.get("category") || "all")
@@ -41,6 +44,25 @@ function FacesPageContent() {
     loadFilters()
   }, [])
 
+  // Load featured post (first post)
+  useEffect(() => {
+    async function loadFeaturedPost() {
+      try {
+        const { data } = await apiClient.getPosts({
+          published: true,
+          pageType: "faces",
+          limit: 1,
+        })
+        if (data.length > 0) {
+          setFeaturedPost(data[0])
+        }
+      } catch (error) {
+        console.error("Error loading featured post:", error)
+      }
+    }
+    loadFeaturedPost()
+  }, [])
+
   // Search function
   const performSearch = useCallback(async () => {
     setLoading(true)
@@ -56,13 +78,15 @@ function FacesPageContent() {
         limit: 50,
         pageType: "faces",
       })
-      setPosts(data)
+      // Skip the first post if it's the featured one
+      const filteredPosts = featuredPost ? data.filter((p) => p.id !== featuredPost.id) : data
+      setPosts(filteredPosts)
     } catch (error) {
       console.error("Search error:", error)
     } finally {
       setLoading(false)
     }
-  }, [searchQuery, selectedCategory, selectedTags, dateFrom, dateTo, sortBy])
+  }, [searchQuery, selectedCategory, selectedTags, dateFrom, dateTo, sortBy, featuredPost])
 
   // Update URL with search params
   const updateURL = useCallback(() => {
@@ -104,8 +128,15 @@ function FacesPageContent() {
       <TopNav />
 
       <main className="flex-1">
+        {/* Hero Section */}
+        <PageHero
+          featuredPost={featuredPost}
+          contentType={contentType}
+          onContentTypeChange={setContentType}
+        />
+
         {/* Results Section */}
-        <section className="py-8">
+        <section className="py-8 bg-muted/30">
           <div className="container max-w-7xl mx-auto px-4">
             {loading ? (
               <div className="flex flex-col items-center justify-center py-20 gap-4">

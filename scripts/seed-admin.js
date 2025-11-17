@@ -6,7 +6,7 @@ const SUPABASE_URL =
 const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 const ADMIN_EMAIL = "admin@voices.mn";
-const ADMIN_PASSWORD = "YWRtaW5hY2MK";
+const ADMIN_PASSWORD = "bb";
 
 async function main() {
   if (!SUPABASE_URL || !SERVICE_ROLE_KEY) {

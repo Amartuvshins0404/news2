@@ -163,7 +163,14 @@ function handleSupabaseTableError(error: unknown, table: string): never {
   if (error instanceof Error) {
     throw error;
   }
-  throw new Error("Unexpected Supabase error");
+  // Try to extract meaningful error information from Supabase error objects
+  if (error && typeof error === "object") {
+    const err = error as { code?: string; message?: string; details?: string; hint?: string };
+    const errorMessage = err.message || err.details || err.hint || "Unknown error";
+    const errorCode = err.code ? ` (${err.code})` : "";
+    throw new Error(`Supabase error for table '${table}': ${errorMessage}${errorCode}`);
+  }
+  throw new Error(`Unexpected Supabase error for table '${table}': ${String(error)}`);
 }
 
 function isSupabaseUniqueConstraintError(
