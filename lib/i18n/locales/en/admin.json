@@ -127,7 +127,10 @@
       "categoryPlaceholder": "Select category",
       "featuredToggle": "Featured Post",
       "statusLabel": "Status",
-      "scheduledAtLabel": "Scheduled At"
+      "scheduledAtLabel": "Scheduled At",
+      "pageTypeLabel": "Page Type",
+      "pageTypeExplore": "Explore",
+      "pageTypeFaces": "Faces"
     },
     "actions": {
       "saveDraft": "Save Draft",

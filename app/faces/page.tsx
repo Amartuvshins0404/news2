@@ -14,7 +14,7 @@ import { useTranslations } from "@/lib/i18n/use-translations"
 import { Search, Loader2, Zap } from "lucide-react"
 import type { Post, Category, Tag } from "@/lib/types"
 
-function ExplorePageContent() {
+function FacesPageContent() {
   const { t } = useTranslations("common")
   const searchParams = useSearchParams()
   const router = useRouter()
@@ -55,7 +55,7 @@ function ExplorePageContent() {
         dateTo: dateTo || undefined,
         sortBy,
         limit: 50,
-        pageType: "explore",
+        pageType: "faces",
       })
       setPosts(data)
     } catch (error) {
@@ -74,7 +74,7 @@ function ExplorePageContent() {
     if (dateFrom) params.set("from", dateFrom)
     if (dateTo) params.set("to", dateTo)
     if (sortBy !== "date") params.set("sort", sortBy)
-    router.push(`/explore?${params.toString()}`, { scroll: false })
+    router.push(`/faces?${params.toString()}`, { scroll: false })
   }, [searchQuery, selectedCategory, selectedTags, dateFrom, dateTo, sortBy, router])
 
   // Perform search on mount and when filters change
@@ -94,7 +94,7 @@ function ExplorePageContent() {
     setDateFrom("")
     setDateTo("")
     setSortBy("date")
-    router.push("/explore")
+    router.push("/faces")
   }
 
   const hasActiveFilters =
@@ -116,16 +116,16 @@ function ExplorePageContent() {
                 <div className="flex items-center gap-2 w-fit">
                   <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
                   <span className="text-sm font-semibold text-primary uppercase tracking-widest">
-                    {t("explore.discover")}
+                    {t("faces.discover")}
                   </span>
                 </div>
                 <h1 className="text-5xl md:text-6xl font-bold text-balance leading-tight text-foreground">
-                  {t("explore.premiumNews")}{" "}
+                  {t("faces.premiumNews")}{" "}
                   <span className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-                    {t("explore.insights")}
+                    {t("faces.insights")}
                   </span>
                 </h1>
-                <p className="text-lg text-muted-foreground max-w-2xl leading-relaxed">{t("explore.description")}</p>
+                <p className="text-lg text-muted-foreground max-w-2xl leading-relaxed">{t("faces.description")}</p>
               </div>
 
               <div className="flex flex-col sm:flex-row gap-3 pt-4">
@@ -133,7 +133,7 @@ function ExplorePageContent() {
                   <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground group-focus-within:text-primary transition-colors pointer-events-none" />
                   <Input
                     type="search"
-                    placeholder={t("explore.searchPlaceholder")}
+                    placeholder={t("faces.searchPlaceholder")}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && handleSearch()}
@@ -151,7 +151,7 @@ function ExplorePageContent() {
                   ) : (
                     <>
                       <Zap className="h-5 w-5 mr-2" />
-                      {t("explore.search")}
+                      {t("faces.search")}
                     </>
                   )}
                 </Button>
@@ -160,7 +160,7 @@ function ExplorePageContent() {
               {hasActiveFilters && (
                 <div className="flex flex-wrap gap-2 items-center pt-4 border-t border-border/50">
                   <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">
-                    {t("explore.filters")}:
+                    {t("faces.filters")}:
                   </span>
                   <div className="flex flex-wrap gap-2">
                     {searchQuery && (
@@ -218,7 +218,7 @@ function ExplorePageContent() {
                       </div>
                     ))}
                     <Button variant="ghost" size="sm" onClick={handleClearFilters} className="text-xs font-semibold">
-                      {t("explore.clearAll")}
+                      {t("faces.clearAll")}
                     </Button>
                   </div>
                 </div>
@@ -250,14 +250,14 @@ function ExplorePageContent() {
             {loading ? (
               <div className="flex flex-col items-center justify-center py-20 gap-4">
                 <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                <span className="text-muted-foreground font-medium">{t("explore.searching")}</span>
+                <span className="text-muted-foreground font-medium">{t("faces.searching")}</span>
               </div>
             ) : posts.length > 0 ? (
               <>
                 <div className="mb-8">
                   <p className="text-sm font-semibold text-muted-foreground uppercase tracking-widest">
                     {t(
-                      posts.length === 1 ? "explore.resultsFound" : "explore.resultsFound_other",
+                      posts.length === 1 ? "faces.resultsFound" : "faces.resultsFound_other",
                       { count: posts.length },
                     )}
                   </p>
@@ -275,13 +275,13 @@ function ExplorePageContent() {
                     <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
                       <Search className="h-6 w-6 text-primary" />
                     </div>
-                    <span>{t("explore.noResults")}</span>
+                    <span>{t("faces.noResults")}</span>
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="text-center">
-                  <p className="text-muted-foreground mb-6">{t("explore.noResultsDesc")}</p>
+                  <p className="text-muted-foreground mb-6">{t("faces.noResultsDesc")}</p>
                   <Button onClick={handleClearFilters} variant="outline">
-                    {t("explore.clearFilters")}
+                    {t("faces.clearFilters")}
                   </Button>
                 </CardContent>
               </Card>
@@ -295,7 +295,7 @@ function ExplorePageContent() {
   )
 }
 
-export default function ExplorePage() {
+export default function FacesPage() {
   return (
     <Suspense
       fallback={
@@ -304,7 +304,7 @@ export default function ExplorePage() {
         </div>
       }
     >
-      <ExplorePageContent />
+      <FacesPageContent />
     </Suspense>
   )
 }

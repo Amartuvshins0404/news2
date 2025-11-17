@@ -16,6 +16,7 @@ export interface Post {
   read_time: number;
   views: number;
   is_featured: boolean;
+  page_type?: "explore" | "faces";
   comments?: Comment[];
 }
 

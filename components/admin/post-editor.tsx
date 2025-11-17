@@ -40,6 +40,7 @@ export function PostEditor({ post, onSave }: PostEditorProps) {
   const [status, setStatus] = useState<"draft" | "scheduled" | "published">(post?.status || "draft")
   const [isFeatured, setIsFeatured] = useState(post?.is_featured || false)
   const [scheduledAt, setScheduledAt] = useState(post?.scheduled_at || "")
+  const [pageType, setPageType] = useState<"explore" | "faces">(post?.page_type || "explore")
 
   const [categories, setCategories] = useState<Category[]>([])
   const [tags, setTags] = useState<Tag[]>([])
@@ -95,6 +96,7 @@ export function PostEditor({ post, onSave }: PostEditorProps) {
         tags: postTags,
         status: newStatus,
         is_featured: isFeatured,
+        page_type: pageType,
         scheduled_at: newStatus === "scheduled" ? scheduledAt : undefined,
         published_at: newStatus === "published" ? new Date().toISOString() : undefined,
       }
@@ -347,6 +349,19 @@ export function PostEditor({ post, onSave }: PostEditorProps) {
                   />
                 </div>
               )}
+
+              <div className="space-y-2">
+                <Label htmlFor="page-type">{t("postEditor.form.pageTypeLabel")}</Label>
+                <Select value={pageType} onValueChange={(v: any) => setPageType(v)}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="explore">{t("postEditor.form.pageTypeExplore")}</SelectItem>
+                    <SelectItem value="faces">{t("postEditor.form.pageTypeFaces")}</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </CardContent>
           </Card>
         </div>

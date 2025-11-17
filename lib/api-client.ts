@@ -87,6 +87,7 @@ export const apiClient = {
     dateTo?: string;
     sortBy?: "date" | "views" | "title";
     status?: Post["status"];
+    pageType?: "explore" | "faces";
     revalidate?: number | false;
   }) {
     try {
@@ -101,6 +102,7 @@ export const apiClient = {
         dateTo: params?.dateTo,
         sortBy: params?.sortBy,
         status: params?.status,
+        pageType: params?.pageType,
       });
       const response = await request<{ data: Post[]; pagination: null }>(
         `/posts${query}`,

@@ -1,8 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import type { Prisma } from "@prisma/client";
 import {
-  PrismaClientKnownRequestError,
   PrismaClientInitializationError,
+  PrismaClientKnownRequestError,
 } from "@prisma/client/runtime/library";
 import { createClient as createBrowserClient } from "./supabase/client";
 import { createClient as createServerClient } from "./supabase/server";
@@ -108,13 +108,22 @@ async function withPrismaFallback<T>(
     if (shouldFallbackToSupabase(error) && hasSupabaseCredentials) {
       // Only log connection errors in development, and make them less verbose
       if (process.env.NODE_ENV === "development") {
-        const errorMessage = error instanceof Error ? error.message : String(error);
-        const errorCode = error instanceof PrismaClientKnownRequestError ? error.code : undefined;
+        const errorMessage =
+          error instanceof Error ? error.message : String(error);
+        const errorCode =
+          error instanceof PrismaClientKnownRequestError
+            ? error.code
+            : undefined;
 
         // Suppress verbose connection error logs - fallback is working as expected
-        if (errorCode === "P1001" || /can't reach database server/i.test(errorMessage)) {
+        if (
+          errorCode === "P1001" ||
+          /can't reach database server/i.test(errorMessage)
+        ) {
           console.debug(
-            `[supabase-api] Prisma connection unavailable (${errorCode || "connection error"}), using Supabase fallback`
+            `[supabase-api] Prisma connection unavailable (${
+              errorCode || "connection error"
+            }), using Supabase fallback`
           );
         } else {
           console.warn(
@@ -243,7 +252,6 @@ async function ensureFallbackAuthor() {
         .limit(1);
       if (error) {
         handleSupabaseTableError(error, "authors");
-        return fallbackAuthor;
       }
       const firstRow = Array.isArray(data) ? data[0] : data;
       if (firstRow) {
@@ -300,6 +308,7 @@ function mapPost(record: PostWithRelations): Post {
     updated_at: record.updated_at.toISOString(),
     read_time: record.read_time ?? 0,
     is_featured: record.is_featured,
+    page_type: ((record as any).page_type as "explore" | "faces") ?? "explore",
     views: record.analytics?.views_count ?? 0,
     author: mapAuthorEntity(record.author),
     category: mapCategory(record.category),
@@ -379,6 +388,7 @@ export async function getPosts(params?: {
   dateTo?: string;
   sortBy?: "date" | "views" | "title";
   status?: Post["status"];
+  pageType?: "explore" | "faces";
 }): Promise<Post[]> {
   return withPrismaFallback(
     async () => {
@@ -388,6 +398,10 @@ export async function getPosts(params?: {
         where.status = params.status;
       } else if (params?.published) {
         where.status = "published";
+      }
+
+      if (params?.pageType) {
+        (where as any).page_type = params.pageType;
       }
 
       if (params?.categoryId) {
@@ -528,8 +542,9 @@ export async function createPost(
                 ? new Date(post.scheduled_at)
                 : undefined,
               is_featured: post.is_featured ?? false,
+              page_type: post.page_type ?? "explore",
               read_time: post.read_time ?? 5,
-            },
+            } as any,
           });
 
           if (post.tags?.length) {
@@ -583,28 +598,32 @@ export async function updatePost(
     async () => {
       try {
         const updatedPost = await prisma.$transaction(async (tx) => {
+          const updateData: any = {
+            title: updates.title?.trim(),
+            slug: normalizedSlug ?? updates.slug ?? undefined,
+            excerpt: updates.excerpt,
+            body_html: updates.body_html,
+            featured_image: updates.featured_image,
+            category_id: updates.category?.id,
+            status: updates.status,
+            published_at: updates.published_at
+              ? new Date(updates.published_at)
+              : undefined,
+            scheduled_at:
+              updates.scheduled_at === undefined
+                ? undefined
+                : updates.scheduled_at
+                ? new Date(updates.scheduled_at)
+                : null,
+            is_featured: updates.is_featured ?? undefined,
+            read_time: updates.read_time ?? undefined,
+          };
+          if (updates.page_type !== undefined) {
+            updateData.page_type = updates.page_type;
+          }
           const updated = await tx.post.update({
             where: { id },
-            data: {
-              title: updates.title?.trim(),
-              slug: normalizedSlug ?? updates.slug ?? undefined,
-              excerpt: updates.excerpt,
-              body_html: updates.body_html,
-              featured_image: updates.featured_image,
-              category_id: updates.category?.id,
-              status: updates.status,
-              published_at: updates.published_at
-                ? new Date(updates.published_at)
-                : undefined,
-              scheduled_at:
-                updates.scheduled_at === undefined
-                  ? undefined
-                  : updates.scheduled_at
-                  ? new Date(updates.scheduled_at)
-                  : null,
-              is_featured: updates.is_featured ?? undefined,
-              read_time: updates.read_time ?? undefined,
-            },
+            data: updateData,
           });
 
           if (updates.tags) {
@@ -1252,27 +1271,27 @@ export async function getRecentComments(limit = 10): Promise<Comment[]> {
 export async function deleteComment(id: string): Promise<void> {
   await withPrismaFallback(
     async () => {
-      const idsToDelete: string[] = []
-      let queue: string[] = [id]
+      const idsToDelete: string[] = [];
+      let queue: string[] = [id];
 
       while (queue.length > 0) {
-        const chunk = queue.splice(0, 50)
-        idsToDelete.push(...chunk)
+        const chunk = queue.splice(0, 50);
+        idsToDelete.push(...chunk);
 
         const children = await prisma.comment.findMany({
           where: { parent_id: { in: chunk } },
           select: { id: true },
-        })
+        });
 
         if (children.length > 0) {
-          queue.push(...children.map((child) => child.id))
+          queue.push(...children.map((child) => child.id));
         }
       }
 
       if (idsToDelete.length > 0) {
         await prisma.comment.deleteMany({
           where: { id: { in: idsToDelete } },
-        })
+        });
       }
     },
     () => legacyDeleteComment(id)
@@ -1398,12 +1417,13 @@ async function legacyGetPosts(params?: {
   dateTo?: string;
   sortBy?: "date" | "views" | "title";
   status?: Post["status"];
+  pageType?: "explore" | "faces";
 }): Promise<Post[]> {
   const client = await createServerClient();
   let query = client.from("posts").select(
     `
       id, slug, title, excerpt, body_html, featured_image, status,
-      published_at, scheduled_at, created_at, updated_at, read_time, is_featured,
+      published_at, scheduled_at, created_at, updated_at, read_time, is_featured, page_type,
       author_id, category_id,
       authors(id, slug, name, bio, avatar, role, social_links),
       categories(id, slug, name, description, post_count),
@@ -1416,6 +1436,10 @@ async function legacyGetPosts(params?: {
     query = query.eq("status", params.status);
   } else if (params?.published) {
     query = query.eq("status", "published");
+  }
+
+  if (params?.pageType) {
+    query = query.eq("page_type", params.pageType);
   }
 
   let categoryId = params?.categoryId;
@@ -1499,6 +1523,7 @@ async function legacyGetPosts(params?: {
       updated_at: row.updated_at,
       read_time: row.read_time ?? 0,
       is_featured: row.is_featured ?? false,
+      page_type: row.page_type ?? "explore",
       views: analytics.views_count || 0,
       author: mapSupabaseAuthor(row.authors),
       category: mapSupabaseCategory(row.categories),

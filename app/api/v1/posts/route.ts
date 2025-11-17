@@ -13,6 +13,7 @@ export async function GET(request: Request) {
     const tagsParam = searchParams.get("tags")
     const sortBy = (searchParams.get("sortBy") ?? undefined) as "date" | "views" | "title" | undefined
     const statusParam = searchParams.get("status") as ("draft" | "scheduled" | "published") | null
+    const pageType = searchParams.get("pageType") as "explore" | "faces" | null
 
     const posts = await getPosts({
       published: publishedParam ? publishedParam === "true" : undefined,
@@ -25,6 +26,7 @@ export async function GET(request: Request) {
       dateTo: searchParams.get("dateTo") ?? undefined,
       sortBy,
       status: statusParam ?? undefined,
+      pageType: pageType ?? undefined,
     })
 
     return NextResponse.json({ data: posts, pagination: null })

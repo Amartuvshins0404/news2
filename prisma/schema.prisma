@@ -76,6 +76,7 @@ model Post {
   updated_at     DateTime   @updatedAt
   read_time      Int        @default(5)
   is_featured    Boolean    @default(false)
+  page_type      String?    @default("explore")
   category_id    String?
   author_id      String?
   analytics      Analytics?
@@ -88,6 +89,7 @@ model Post {
   @@index([category_id])
   @@index([status])
   @@index([published_at])
+  @@index([page_type])
   @@map("posts")
 }
 
